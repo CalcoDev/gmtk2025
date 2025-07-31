@@ -25,7 +25,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
     if InputManager.data.rope_attach.pressed:
-        print(rope_handler.try_attach())
+        rope_handler.try_attach()
 
     if not is_dashing and _dash_timer < 0.0 and InputManager.data.dash.pressed:
         _start_dash()

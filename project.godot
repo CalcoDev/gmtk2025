@@ -70,6 +70,7 @@ rope_attach={
 2d_physics/layer_3="entities"
 2d_physics/layer_5="rope_physical"
 2d_physics/layer_6="rope_metaphorical"
+2d_physics/layer_7="rope_will_detect_things_here_and_react_to_them"
 
 [rendering]
 

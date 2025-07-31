@@ -1,9 +1,12 @@
-[gd_scene load_steps=9 format=3 uid="uid://clovvvq1w28ae"]
+[gd_scene load_steps=11 format=3 uid="uid://clovvvq1w28ae"]
 
 [ext_resource type="Script" uid="uid://cqof6kdlctftf" path="res://common/scripts/kcamera.gd" id="1_v16wq"]
 [ext_resource type="PackedScene" uid="uid://dm4k5oqkdfa7l" path="res://rope_sim/scenes/entities/player/player.tscn" id="2_fjyik"]
+[ext_resource type="Script" uid="uid://dcq7531e5tkhq" path="res://rope_sim/scripts/rope.gd" id="2_p52x5"]
 [ext_resource type="Script" uid="uid://rub4sdiyfh0q" path="res://rope_sim/scripts/rope_handler.gd" id="3_t1uni"]
 [ext_resource type="Script" uid="uid://r0apuwho8ujg" path="res://rope_sim/scripts/rope_attacher.gd" id="4_alhmp"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_p52x5"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_fjyik"]
 radius = 12.0
@@ -30,11 +33,35 @@ metadata/_custom_type_script = "uid://cqof6kdlctftf"
 [node name="YSort" type="Node2D" parent="."]
 y_sort_enabled = true
 
+[node name="Rope" type="Node2D" parent="YSort" node_paths=PackedStringArray("_line", "_shape_cast")]
+script = ExtResource("2_p52x5")
+_line = NodePath("Line2D")
+_shape_cast = NodePath("ShapeCast2D")
+_point_count = 20
+_rope_length = 100.0
+_gravity = Vector2(0, 0)
+_damp_factor = 0.9
+_constraint_run_count = 30
+_collision_run_interval = 3
+_collision_radius = 5.0
+_bounce_factor = 0.5
+
+[node name="Line2D" type="Line2D" parent="YSort/Rope"]
+width = 3.0
+default_color = Color(0.475558, 0.270523, 0.0518375, 1)
+
+[node name="ShapeCast2D" type="ShapeCast2D" parent="YSort/Rope"]
+enabled = false
+shape = SubResource("CircleShape2D_p52x5")
+target_position = Vector2(0, 0)
+collision_mask = 65
+
 [node name="Player" parent="YSort" node_paths=PackedStringArray("rope_handler") instance=ExtResource("2_fjyik")]
 rope_handler = NodePath("RopeHandler")
 
-[node name="RopeHandler" type="Node2D" parent="YSort/Player" node_paths=PackedStringArray("rope_attacher_area")]
+[node name="RopeHandler" type="Node2D" parent="YSort/Player" node_paths=PackedStringArray("rope", "rope_attacher_area")]
 script = ExtResource("3_t1uni")
+rope = NodePath("../../Rope")
 rope_attacher_area = NodePath("../RopeAttacherDetector")
 
 [node name="RopeAttacherDetector" type="Area2D" parent="YSort/Player"]
@@ -44,9 +71,11 @@ collision_mask = 32
 [node name="CollisionShape2D" type="CollisionShape2D" parent="YSort/Player/RopeAttacherDetector"]
 shape = SubResource("CircleShape2D_fjyik")
 
-[node name="RopeAttacher" type="Node2D" parent="YSort"]
+[node name="RopeAttacher" type="Node2D" parent="YSort" node_paths=PackedStringArray("attach_position", "popup")]
 position = Vector2(47, 0)
 script = ExtResource("4_alhmp")
+attach_position = NodePath(".")
+popup = NodePath("Label")
 
 [node name="Sprite2D" type="Sprite2D" parent="YSort/RopeAttacher"]
 texture = SubResource("GradientTexture2D_fjyik")
@@ -57,3 +86,8 @@ collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="YSort/RopeAttacher/RopeAttacherArea"]
 shape = SubResource("CircleShape2D_t1uni")
+
+[node name="Label" type="Label" parent="YSort/RopeAttacher"]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Attach"
