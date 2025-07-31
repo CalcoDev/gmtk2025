@@ -23,35 +23,40 @@ void CalcoRope::_bind_methods() {
 
     ClassDB::bind_method(D_METHOD("get_damp_factor"), &CalcoRope::get_damp_factor);
     ClassDB::bind_method(D_METHOD("set_damp_factor", "damp_factor"), &CalcoRope::set_damp_factor);
-    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "damp_factor", PROPERTY_HINT_RANGE, "0.0,1.0,0.01"), "set_damp_factor", "get_damp_factor");
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "damp_factor"), "set_damp_factor", "get_damp_factor");
 
     ClassDB::bind_method(D_METHOD("get_constraint_run_count"), &CalcoRope::get_constraint_run_count);
     ClassDB::bind_method(D_METHOD("set_constraint_run_count", "constraint_run_count"), &CalcoRope::set_constraint_run_count);
-    ADD_PROPERTY(PropertyInfo(Variant::INT, "constraint_run_count", PROPERTY_HINT_RANGE, "1,100,1"), "set_constraint_run_count", "get_constraint_run_count");
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "constraint_run_count"), "set_constraint_run_count", "get_constraint_run_count");
 
     ClassDB::bind_method(D_METHOD("get_collision_run_interval"), &CalcoRope::get_collision_run_interval);
     ClassDB::bind_method(D_METHOD("set_collision_run_interval", "collision_run_interval"), &CalcoRope::set_collision_run_interval);
-    ADD_PROPERTY(PropertyInfo(Variant::INT, "collision_run_interval", PROPERTY_HINT_RANGE, "1,20,1"), "set_collision_run_interval", "get_collision_run_interval");
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "collision_run_interval"), "set_collision_run_interval", "get_collision_run_interval");
 
     ClassDB::bind_method(D_METHOD("get_collision_radius"), &CalcoRope::get_collision_radius);
     ClassDB::bind_method(D_METHOD("set_collision_radius", "collision_radius"), &CalcoRope::set_collision_radius);
-    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "collision_radius", PROPERTY_HINT_RANGE, "0.1,10.0,0.1"), "set_collision_radius", "get_collision_radius");
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "collision_radius"), "set_collision_radius", "get_collision_radius");
 
     ClassDB::bind_method(D_METHOD("get_bounce_factor"), &CalcoRope::get_bounce_factor);
     ClassDB::bind_method(D_METHOD("set_bounce_factor", "bounce_factor"), &CalcoRope::set_bounce_factor);
-    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "bounce_factor", PROPERTY_HINT_RANGE, "0.0,1.0,0.01"), "set_bounce_factor", "get_bounce_factor");
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "bounce_factor"), "set_bounce_factor", "get_bounce_factor");
 
 	ClassDB::bind_method(D_METHOD("get_point_count"), &CalcoRope::get_point_count);
     ClassDB::bind_method(D_METHOD("set_point_count", "point_count"), &CalcoRope::set_point_count);
-	ADD_PROPERTY(PropertyInfo(Variant::INT, "point_count", PROPERTY_HINT_RANGE, "2,100,1"), "set_point_count", "get_point_count");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "point_count"), "set_point_count", "get_point_count");
 
     ClassDB::bind_method(D_METHOD("get_length"), &CalcoRope::get_length);
     ClassDB::bind_method(D_METHOD("set_length", "length"), &CalcoRope::set_length);
-    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "length", PROPERTY_HINT_RANGE, "1.0,1000.0,0.1"), "set_length", "get_length");
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "length"), "set_length", "get_length");
 
     ClassDB::bind_method(D_METHOD("get_origin"), &CalcoRope::get_origin);
     ClassDB::bind_method(D_METHOD("set_origin", "origin"), &CalcoRope::set_origin);
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "origin"), "set_origin", "get_origin");
+
+    ClassDB::bind_method(D_METHOD("print_spatial_hash", "top_left", "top_right"), &CalcoRope::print_spatial_hash);
+    ClassDB::bind_method(D_METHOD("update_spatial_hash", "top_left", "top_right"), &CalcoRope::update_spatial_hash);
+    ClassDB::bind_method(D_METHOD("update_simulation", "render"), &CalcoRope::update_simulation);
+    ClassDB::bind_method(D_METHOD("render_simulation", "render"), &CalcoRope::render_simulation);
 }
 
 CalcoRope::CalcoRope() {
@@ -104,6 +109,60 @@ void CalcoRope::render_simulation(double delta) {
 	}
 }
 
+void CalcoRope::update_spatial_hash(Vector2 top_left, Vector2 bottom_right) {
+    // double grid_size = (double) get_segment_length();
+    Vector2i top_left_cell = top_left / (_collision_radius / 2.0);
+    Vector2i bottom_right_cell = bottom_right / (_collision_radius / 2.0);
+    // godot::print_line("Starting updating spatial hash global: ", top_left, bottom_right);
+    // godot::print_line("Starting updating spatial hash: ", top_left_cell, bottom_right_cell);
+
+    _spatial_hash.clear();
+    for (int y = top_left_cell.y; y < bottom_right_cell.y; ++y) {
+        for (int x = top_left_cell.x; x < bottom_right_cell.x; ++x) {
+            Vector2i global_cell = Vector2i(x, y);
+            Vector2 global_position_pos = global_cell * (_collision_radius / 2.0);
+            // godot::print_line(global_cell, " ", global_position_pos);
+            _shape_cast->set_global_position(global_position_pos);
+            _shape_cast->force_shapecast_update();
+            Array collision_results = _shape_cast->get_collision_result();
+            double min_dist = 9999.9;
+            for (int i = 0; i < collision_results.size(); ++i) {
+                Dictionary coll_info = collision_results[i];
+                Vector2 closest_point = coll_info["point"];
+                // godot::print_line("pos: ", global_position_pos, " | col: ", closest_point);
+                double distance = global_position_pos.distance_to(closest_point);
+                if (distance < min_dist) {
+                    v2f v = v2f(closest_point);
+                    v2i aa = v2i(global_cell);
+                    _spatial_hash[aa] = v;
+                    // godot::print_line("set pos: ", aa.x, " ", aa.y, " | ", v.x, " ", v.y);
+                    min_dist = distance;
+                }
+            }
+            if (collision_results.size() == 0) {
+                _spatial_hash[v2i(global_cell)] = Vector2(0, 0);
+            }
+        }
+    }
+}
+
+void CalcoRope::print_spatial_hash(Vector2 top_left, Vector2 bottom_right) {
+    // godot::print_line("Printing spatial hash!");
+    Vector2i top_left_cell = top_left / (_collision_radius / 2.0);
+    Vector2i bottom_right_cell = bottom_right / (_collision_radius / 2.0);
+    for (int y = top_left_cell.y; y < bottom_right_cell.y; ++y) {
+        for (int x = top_left_cell.x; x < bottom_right_cell.x; ++x) {
+            Vector2i global_cell = top_left_cell + Vector2i(x, y);
+            // Vector2 global_position_pos = global_cell * _collision_radius;
+            v2f v = _spatial_hash[v2i(global_cell)];
+            Vector2 vv = Vector2(v.x, v.y);
+            if (vv != Vector2(0, 0)) {
+                // godot::print_line(global_cell, ": ", vv);
+            }
+        }
+    }
+}
+
 void CalcoRope::update_simulation(double delta) {
     // Fix the first point
     _points[0].pos = _origin;
@@ -136,26 +195,43 @@ void CalcoRope::update_simulation(double delta) {
         if (ic % _collision_run_interval == 0) {
             for (RopePoint& point : _points) {
                 Vector2 vel = point.pos - point.prev_pos;
-				_shape_cast->set_global_position(point.pos);
-				_shape_cast->force_shapecast_update();
 
-				Array collision_results = _shape_cast->get_collision_result();
-                for (int j = 0; j < collision_results.size(); ++j) {
-                    Dictionary coll_info = collision_results[j];
-                    Vector2 closest_point = coll_info["point"];
-                    float distance = point.pos.distance_to(closest_point);
-                    if (distance < _collision_radius) {
-                        Vector2 normal = coll_info["normal"];
-                        if (normal == Vector2(0, 0)) {
-                            normal = (point.pos - closest_point).normalized();
+                Vector2i grid_cell = point.pos / (_collision_radius / 2.0);
+                Vector2 closest_point;
+                float min_dist = 999.9;
+                for (int yoff = -1; yoff < 2; ++yoff) {
+                    for (int xoff = -1; xoff < 2; ++xoff) {
+                        if (yoff == 0 && xoff == 0) {
+                            continue;
                         }
-                        float depth = _collision_radius - distance;
-                        point.pos += normal * depth;
 
-                        Vector2 b = vel.bounce(normal) * _bounce_factor;
-                        vel = b;
+                        v2f _closest_point = _spatial_hash[grid_cell + Vector2i(xoff, yoff)];
+                        Vector2 cp = Vector2(_closest_point.x, _closest_point.y);
+                        float distance = point.pos.distance_to(cp);
+                        if (distance < min_dist) {
+                            min_dist = distance;
+                            closest_point = cp;
+                        }
                     }
                 }
+
+                if (min_dist < _collision_radius) {
+                    if (ic == 0) {
+                        // godot::print_line(point.pos, " | ", grid_cell, " | ", closest_point.x, " ", closest_point.y);
+                    }
+                    Vector2 normal = (point.pos - closest_point).normalized();
+                    float depth = _collision_radius - min_dist;
+                    point.pos += normal * depth;
+
+                    if (normal != Vector2(0, 0)) {
+                        Vector2 b = vel.bounce(normal) * _bounce_factor;
+                        vel = b;
+                    } else {
+                        vel = normal;
+                    }
+
+                }
+
                 point.prev_pos = point.pos - vel;
             }
         }

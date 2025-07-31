@@ -33,9 +33,17 @@ func get_rope() -> CalcoRope:
 func _ready() -> void:
     rope_attacher_area.area_entered.connect(_on_rope_attacher_enter)
     rope_attacher_area.area_exited.connect(_on_rope_attacher_exit)
+    var v := Vector2(-480, -480)
+    rope.update_spatial_hash(v, -v)
 
+# var _f := 0
 func _physics_process(_delta: float) -> void:
     rope.origin = get_parent().global_position
+    # if _f == 0:
+    #     _f += 1
+    #     var v := Vector2(-480, -480)
+    #     rope.update_spatial_hash(v, -v)
+    #     rope.print_spatial_hash(v, -v)
 
 func _on_rope_attacher_enter(other: Area2D) -> void:
     var p := other.get_parent()

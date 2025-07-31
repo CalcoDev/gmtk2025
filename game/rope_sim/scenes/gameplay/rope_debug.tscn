@@ -47,9 +47,10 @@ collision_mask = 65
 line_path = NodePath("../Line2D")
 shape_cast_path = NodePath("../ShapeCast2D")
 gravity = Vector2(0, 0)
-collision_run_interval = 2
-collision_radius = 5.0
-point_count = 100
+constraint_run_count = 200
+collision_run_interval = 3
+collision_radius = 2.0
+point_count = 250
 length = 500.0
 
 [node name="Player" parent="YSort" node_paths=PackedStringArray("rope_handler") instance=ExtResource("2_fjyik")]
@@ -89,19 +90,22 @@ offset_bottom = 23.0
 text = "Attach"
 
 [node name="RopePivot" parent="YSort" instance=ExtResource("6_6jp0m")]
-position = Vector2(28, 65)
+position = Vector2(-54, -38)
 
 [node name="RopePivot2" parent="YSort" instance=ExtResource("6_6jp0m")]
-position = Vector2(-37, 41)
+position = Vector2(-29, 19)
 
 [node name="RopePivot3" parent="YSort" instance=ExtResource("6_6jp0m")]
-position = Vector2(-10, 79)
+position = Vector2(-80, 62)
 
 [node name="RopePivot4" parent="YSort" instance=ExtResource("6_6jp0m")]
-position = Vector2(-54, 103)
+position = Vector2(-30, 87)
 
 [node name="RopePivot5" parent="YSort" instance=ExtResource("6_6jp0m")]
-position = Vector2(-82, 71)
+position = Vector2(11, 51)
 
 [node name="RopePivot6" parent="YSort" instance=ExtResource("6_6jp0m")]
-position = Vector2(-66, -46)
+position = Vector2(57, 82)
+
+[node name="RopePivot7" parent="YSort" instance=ExtResource("6_6jp0m")]
+position = Vector2(103, -31)
