@@ -269,3 +269,8 @@ FodyWeavers.xsd
 *.msp
 *.sln.iml
 coverage*[.json, .xml, .info]
+
+
+# removing these from gitignore because I dont trust cube stef or tudy to 
+# be able to properly compile the cpp gdextension
+!game/bin
