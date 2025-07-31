@@ -21,12 +21,21 @@ func try_attach() -> bool:
         return true
     return false
 
+func get_attached_point() -> RopeAttacher:
+    return _current_attach
+
+func is_attached() -> bool:
+    return _is_attached
+
+func get_rope() -> Rope:
+    return rope
+
 func _ready() -> void:
     rope_attacher_area.area_entered.connect(_on_rope_attacher_enter)
     rope_attacher_area.area_exited.connect(_on_rope_attacher_exit)
 
 func _physics_process(_delta: float) -> void:
-    rope._rope_start = get_parent().global_position
+    rope.rope_start = get_parent().global_position
 
 func _on_rope_attacher_enter(other: Area2D) -> void:
     var p := other.get_parent()

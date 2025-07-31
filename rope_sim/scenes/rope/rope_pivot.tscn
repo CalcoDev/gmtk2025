@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://da4lipcfqpqih"]
+
+[sub_resource type="Gradient" id="Gradient_ro4wo"]
+offsets = PackedFloat32Array(1)
+colors = PackedColorArray(0.697555, 0.000585751, 0.741647, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_p52x5"]
+gradient = SubResource("Gradient_ro4wo")
+width = 4
+height = 48
+fill_from = Vector2(0, 1)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_iq3ly"]
+radius = 4.0
+
+[node name="RopePivot" type="StaticBody2D"]
+y_sort_enabled = true
+collision_layer = 64
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("GradientTexture2D_p52x5")
+offset = Vector2(0, -24)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -2)
+shape = SubResource("CircleShape2D_iq3ly")

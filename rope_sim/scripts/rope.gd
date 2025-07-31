@@ -14,7 +14,7 @@ class Point:
 
 @export var _point_count: int = 30
 # @export var _segment_length: float = 2.0
-@export var _rope_length: float = 50.0
+@export var rope_length: float = 50.0
 
 @export var _gravity: Vector2 = Vector2(0.0, 9.8)
 @export var _damp_factor: float = 0.98
@@ -26,16 +26,30 @@ class Point:
 @export var _bounce_factor: float = 0.1
 
 # @export var _constr
-var _rope_start: Vector2
+var rope_start: Vector2
 
 var _points: Array[Point] = []
 
+var _point_distance: float = 0.0
+
+func get_used_rope_distance() -> float:
+    return _point_distance
+
+func set_point(idx: int, pos: Vector2) -> void:
+    _points[idx].pos = pos
+
+func get_point(idx: int) -> Vector2:
+    return _points[idx].pos
+
+func get_point_count() -> int:
+    return _point_count
+
 func _ready() -> void:
-    _rope_start = global_position
+    rope_start = global_position
 
     _points.resize(_point_count)
     for i in _point_count:
-        _points[i] = Point.new(_rope_start + Vector2.DOWN * (i * _get_segment_length()))
+        _points[i] = Point.new(rope_start + Vector2.DOWN * (i * _get_segment_length()))
 
     _update_render()
 
@@ -46,11 +60,11 @@ func _physics_process(delta: float) -> void:
     _update_sim(delta)
 
 func _get_segment_length() -> float:
-    return _rope_length / _point_count
+    return rope_length / _point_count
 
 func _update_sim(delta: float) -> void:
-    _points[0].pos = _rope_start
-    _points[0].prev_pos = _rope_start
+    _points[0].pos = rope_start
+    _points[0].prev_pos = rope_start
 
     for i in _point_count:
         var point := _points[i]
@@ -72,6 +86,7 @@ func _update_sim(delta: float) -> void:
             change = point_diff.normalized() * diff * 0.5
             _points[i + 1].pos -= change
             _points[i + 2].pos += change
+
         
         if ic % _collision_run_interval == 0:
             (_shape_cast.shape as CircleShape2D).radius = _collision_radius
@@ -92,6 +107,10 @@ func _update_sim(delta: float) -> void:
                         # print(b)
                         vel = b
                 point.prev_pos = point.pos - vel
+    
+    _point_distance = 0.0
+    for i in _point_count-1:
+        _point_distance += _points[i].pos.distance_to(_points[i+1].pos)
 
 func _update_render() -> void:
     while _line.points.size() < _point_count:

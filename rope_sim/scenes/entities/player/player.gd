@@ -34,6 +34,8 @@ func _process(delta: float) -> void:
         if _dash_timer < 0.0:
             _end_dash()
 
+var _pullback_prev_vel := Vector2.ZERO
+var _pulled_player_back := false
 func _physics_process(delta: float) -> void:
     var inp := InputManager.data.move_vec
     var body := self
@@ -46,6 +48,8 @@ func _physics_process(delta: float) -> void:
     else:
         if not (abs(_prev_inp.x) > 0.0 and abs(_prev_inp.y) > 0.0) and abs(inp.x) > 0.0 and abs(inp.y) > 0.0:
             body.global_position = body.global_position.round()
+        if _pulled_player_back:
+            velocity = _pullback_prev_vel
         if inp.length_squared() > 0.0:
             var curr_dir := body.velocity.normalized()
             var target_dir := inp.normalized()
@@ -59,6 +63,22 @@ func _physics_process(delta: float) -> void:
         body.move_and_slide()
 
     _prev_inp = inp
+
+    if rope_handler.is_attached():
+        var rope := rope_handler.get_rope()
+
+        var diff := rope.get_point(rope.get_point_count()-1) - global_position
+        var dist := rope.get_used_rope_distance()
+        var length := rope.rope_length * 1.1
+        if dist > length:
+            var pushback := diff.normalized() * (dist - length - 2.0)
+            _pulled_player_back = true
+            _pullback_prev_vel = body.velocity
+            body.move_and_collide(pushback)
+        else:
+            _pulled_player_back = false
+
+        rope.set_point(rope.get_point_count()-1, global_position)
 
 func _start_dash() -> void:
     is_dashing = true
