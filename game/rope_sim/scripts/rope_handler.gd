@@ -36,14 +36,9 @@ func _ready() -> void:
     var v := Vector2(-480, -480)
     rope.update_spatial_hash(v, -v)
 
-# var _f := 0
 func _physics_process(_delta: float) -> void:
+    # rope.clear_spatial_hash_dyanmic()
     rope.origin = get_parent().global_position
-    # if _f == 0:
-    #     _f += 1
-    #     var v := Vector2(-480, -480)
-    #     rope.update_spatial_hash(v, -v)
-    #     rope.print_spatial_hash(v, -v)
 
 func _on_rope_attacher_enter(other: Area2D) -> void:
     var p := other.get_parent()

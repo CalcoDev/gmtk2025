@@ -79,6 +79,8 @@ private:
 	// private stuff
 	std::vector<calco_rope_sim::RopePoint> _points;
 	std::unordered_map<calco_rope_sim::v2i, calco_rope_sim::v2f> _spatial_hash;
+	std::unordered_map<calco_rope_sim::v2i, calco_rope_sim::v2f> _spatial_hash_dynamic;
+
 	float _total_rope_distance;
 
 	Vector2 _origin;
@@ -92,6 +94,10 @@ public:
 
 	void print_spatial_hash(Vector2 top_left, Vector2 bottom_right);
 	void update_spatial_hash(Vector2 top_left, Vector2 bottom_right);
+
+	void clear_spatial_hash_dyanmic();
+	void update_spatial_hash_dynamic(Vector2 top_left, Vector2 bottom_right, int shape_type);
+
 	void update_simulation(double delta);
 	void render_simulation(double delta);
 

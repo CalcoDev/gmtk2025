@@ -1,10 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://clovvvq1w28ae"]
+[gd_scene load_steps=18 format=3 uid="uid://clovvvq1w28ae"]
 
 [ext_resource type="Script" uid="uid://cqof6kdlctftf" path="res://common/scripts/kcamera.gd" id="1_v16wq"]
 [ext_resource type="PackedScene" uid="uid://dm4k5oqkdfa7l" path="res://rope_sim/scenes/entities/player/player.tscn" id="2_fjyik"]
 [ext_resource type="Script" uid="uid://rub4sdiyfh0q" path="res://rope_sim/scripts/rope_handler.gd" id="3_t1uni"]
 [ext_resource type="Script" uid="uid://r0apuwho8ujg" path="res://rope_sim/scripts/rope_attacher.gd" id="4_alhmp"]
 [ext_resource type="PackedScene" uid="uid://da4lipcfqpqih" path="res://rope_sim/scenes/rope/rope_pivot.tscn" id="6_6jp0m"]
+[ext_resource type="Script" uid="uid://ds4qermucdj0b" path="res://rope_sim/scripts/rope_dynamic_collider.gd" id="6_y54lt"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_p52x5"]
 
@@ -23,6 +24,55 @@ fill_from = Vector2(0, 1)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_t1uni"]
 radius = 7.0
+
+[sub_resource type="Gradient" id="Gradient_p52x5"]
+offsets = PackedFloat32Array(1)
+colors = PackedColorArray(1, 0.882353, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_6jp0m"]
+gradient = SubResource("Gradient_p52x5")
+width = 20
+height = 20
+fill_from = Vector2(0, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y54lt"]
+
+[sub_resource type="Animation" id="Animation_p52x5"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(33, -47)]
+}
+
+[sub_resource type="Animation" id="Animation_o4rnb"]
+resource_name = "move"
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(33, -47), Vector2(-54, 44)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_imfxd"]
+_data = {
+&"RESET": SubResource("Animation_p52x5"),
+&"move": SubResource("Animation_o4rnb")
+}
 
 [node name="HHDebug" type="Node2D"]
 
@@ -49,7 +99,7 @@ shape_cast_path = NodePath("../ShapeCast2D")
 gravity = Vector2(0, 0)
 constraint_run_count = 200
 collision_run_interval = 3
-collision_radius = 2.0
+collision_radius = 4.0
 point_count = 250
 length = 500.0
 
@@ -90,22 +140,32 @@ offset_bottom = 23.0
 text = "Attach"
 
 [node name="RopePivot" parent="YSort" instance=ExtResource("6_6jp0m")]
-position = Vector2(-54, -38)
+position = Vector2(-87, -66)
 
 [node name="RopePivot2" parent="YSort" instance=ExtResource("6_6jp0m")]
-position = Vector2(-29, 19)
+position = Vector2(-80, 72)
 
 [node name="RopePivot3" parent="YSort" instance=ExtResource("6_6jp0m")]
-position = Vector2(-80, 62)
+position = Vector2(84, 82)
 
-[node name="RopePivot4" parent="YSort" instance=ExtResource("6_6jp0m")]
-position = Vector2(-30, 87)
+[node name="AnimatableBody2D" type="AnimatableBody2D" parent="YSort" node_paths=PackedStringArray("_rope", "_shape")]
+position = Vector2(33, -47)
+collision_layer = 0
+collision_mask = 64
+script = ExtResource("6_y54lt")
+_rope = NodePath("../CalcoRope")
+_shape = NodePath("CollisionShape2D")
 
-[node name="RopePivot5" parent="YSort" instance=ExtResource("6_6jp0m")]
-position = Vector2(11, 51)
+[node name="Sprite2D" type="Sprite2D" parent="YSort/AnimatableBody2D"]
+texture = SubResource("GradientTexture2D_6jp0m")
+offset = Vector2(0, -10)
 
-[node name="RopePivot6" parent="YSort" instance=ExtResource("6_6jp0m")]
-position = Vector2(57, 82)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="YSort/AnimatableBody2D"]
+position = Vector2(0, -10)
+shape = SubResource("RectangleShape2D_y54lt")
 
-[node name="RopePivot7" parent="YSort" instance=ExtResource("6_6jp0m")]
-position = Vector2(103, -31)
+[node name="AnimationPlayer" type="AnimationPlayer" parent="YSort/AnimatableBody2D"]
+libraries = {
+&"": SubResource("AnimationLibrary_imfxd")
+}
+autoplay = "move"
