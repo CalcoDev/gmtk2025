@@ -96,7 +96,10 @@ public:
 	void update_spatial_hash(Vector2 top_left, Vector2 bottom_right);
 
 	void clear_spatial_hash_dyanmic();
-	void update_spatial_hash_dynamic(Vector2 top_left, Vector2 bottom_right, int shape_type);
+	// void update_spatial_hash_dynamic(Vector2 top_left, Vector2 bottom_right, int shape_type);
+	void update_spatial_hash_dynamic_obb(Vector2 center, Vector2 half_size, double theta);
+	void update_spatial_hash_dynamic_circle(Vector2 center, float radius);
+	// void update_spatial_hash_dynamic_capsule();
 
 	void update_simulation(double delta);
 	void render_simulation(double delta);

@@ -59,7 +59,8 @@ void CalcoRope::_bind_methods() {
     ClassDB::bind_method(D_METHOD("render_simulation", "render"), &CalcoRope::render_simulation);
     
     ClassDB::bind_method(D_METHOD("clear_spatial_hash_dyanmic"), &CalcoRope::clear_spatial_hash_dyanmic);
-    ClassDB::bind_method(D_METHOD("update_spatial_hash_dynamic", "top_left, bottom_right, shape_type"), &CalcoRope::update_spatial_hash_dynamic);
+    ClassDB::bind_method(D_METHOD("update_spatial_hash_dynamic_obb", "center", "half_size", "theta"), &CalcoRope::update_spatial_hash_dynamic_obb);
+    ClassDB::bind_method(D_METHOD("update_spatial_hash_dynamic_circle", "center", "radius"), &CalcoRope::update_spatial_hash_dynamic_circle);
 }
 
 CalcoRope::CalcoRope() {
@@ -142,9 +143,9 @@ void CalcoRope::update_spatial_hash(Vector2 top_left, Vector2 bottom_right) {
                     min_dist = distance;
                 }
             }
-            if (collision_results.size() == 0) {
-                _spatial_hash[v2i(global_cell)] = Vector2(0, 0);
-            }
+            // if (collision_results.size() == 0) {
+            //     _spatial_hash[v2i(global_cell)] = Vector2(0, 0);
+            // }
         }
     }
 }
@@ -153,24 +154,70 @@ void CalcoRope::clear_spatial_hash_dyanmic() {
     _spatial_hash_dynamic.clear();
 }
 
-void CalcoRope::update_spatial_hash_dynamic(Vector2 top_left, Vector2 bottom_right, int shape_type) {
-    Vector2 offset = Vector2(_collision_radius, _collision_radius);
-    Vector2i top_left_cell = (top_left - offset) / (_collision_radius / 2.0);
-    Vector2i bottom_right_cell = (bottom_right + offset) / (_collision_radius / 2.0);
+Vector2 rotate_point(const Vector2& point, float theta) {
+    float cos_theta = std::cos(theta);
+    float sin_theta = std::sin(theta);
+    return {
+        point.x * cos_theta - point.y * sin_theta,
+        point.x * sin_theta + point.y * cos_theta
+    };
+}
 
-    if (shape_type == 0) { // rectangle
-        for (int y = top_left_cell.y - 1; y < bottom_right_cell.y + 1; ++y) {
-            for (int x = top_left_cell.x - 1; x < bottom_right_cell.x + 1; ++x) {
-                Vector2i global_cell = Vector2i(x, y);
-                Vector2 global_position_pos = global_cell * (_collision_radius / 2.0);
-                float cx = std::max(top_left.x, std::min(global_position_pos.x, bottom_right.x));
-                float cy = std::max(top_left.y, std::min(global_position_pos.y, bottom_right.y));
+void CalcoRope::update_spatial_hash_dynamic_obb(Vector2 center, Vector2 half_size, double theta) {
+    Vector2 local_corners[4] = {
+        Vector2(-half_size.x, -half_size.y),
+        Vector2(half_size.x, -half_size.y),
+        Vector2(half_size.x, half_size.y),
+        Vector2(-half_size.x, half_size.y),
+    };
 
-                _spatial_hash_dynamic[v2i(global_cell)] = v2f(cx, cy);
-            }
+    float min_x = std::numeric_limits<float>::max();
+    float max_x = std::numeric_limits<float>::lowest();
+    float min_y = std::numeric_limits<float>::max();
+    float max_y = std::numeric_limits<float>::lowest();
+
+    for (const auto& corner : local_corners) {
+        Vector2 rotated = rotate_point(corner, theta);
+        Vector2 world_point = center + rotated;
+        min_x = std::min(min_x, world_point.x);
+        max_x = std::max(max_x, world_point.x);
+        min_y = std::min(min_y, world_point.y);
+        max_y = std::max(max_y, world_point.y);
+    }
+
+    float offset = _collision_radius;
+    Vector2i top_left_cell = Vector2(min_x - offset, min_y - offset) / (_collision_radius / 2.0);
+    Vector2i bottom_right_cell = Vector2(max_x + offset, max_y + offset) / (_collision_radius / 2.0);
+    for (int y = top_left_cell.y - 1; y < bottom_right_cell.y + 1; ++y) {
+        for (int x = top_left_cell.x - 1; x < bottom_right_cell.x + 1; ++x) {
+            Vector2i global_cell = Vector2i(x, y);
+            Vector2 global_pos = global_cell * (_collision_radius / 2.0);
+
+            Vector2 translated = global_pos - center;
+            Vector2 local_point = rotate_point(translated, -theta);
+
+            Vector2 closest = rotate_point(Vector2(
+                std::max(-half_size.x, std::min(local_point.x, half_size.x)),
+                std::max(-half_size.y, std::min(local_point.y, half_size.y))
+            ), theta) + center;
+
+            _spatial_hash_dynamic[v2i(global_cell)] = v2f(closest);
         }
-    } else if (shape_type == 1) { // circle
-        // TODO(calco): later
+    }
+}
+
+void CalcoRope::update_spatial_hash_dynamic_circle(Vector2 center, float radius) {
+    float offset = _collision_radius;
+    Vector2i top_left_cell = Vector2(center.x - radius - offset, center.x - radius - offset) / (_collision_radius / 2.0);
+    Vector2i bottom_right_cell = Vector2(center.y + radius + offset, center.y + radius + offset) / (_collision_radius / 2.0);
+    for (int y = top_left_cell.y - 1; y < bottom_right_cell.y + 1; ++y) {
+        for (int x = top_left_cell.x - 1; x < bottom_right_cell.x + 1; ++x) {
+            Vector2i global_cell = Vector2i(x, y);
+            Vector2 global_pos = global_cell * (_collision_radius / 2.0);
+            Vector2 diff = global_pos - center;
+            Vector2 closest = global_pos + diff.normalized() * (_collision_radius + radius - diff.length());
+            _spatial_hash_dynamic[v2i(global_cell)] = v2f(closest);
+        }
     }
 }
 
@@ -229,19 +276,28 @@ void CalcoRope::update_simulation(double delta) {
                 float min_dist = 999.9;
                 for (int yoff = -1; yoff < 2; ++yoff) {
                     for (int xoff = -1; xoff < 2; ++xoff) {
-                        // if (yoff == 0 && xoff == 0) {
-                        //     continue;
-                        // }
-
                         v2i hash_point = grid_cell + Vector2i(xoff, yoff);
 
-                        v2f normal_hash_point = _spatial_hash[hash_point];
-                        float normal_dist = point.pos.distance_to(Vector2(normal_hash_point.x, normal_hash_point.y));
-                        v2f dynamic_hash_point = _spatial_hash_dynamic[hash_point];
-                        float dynamic_dist = point.pos.distance_to(Vector2(dynamic_hash_point.x, dynamic_hash_point.y));
+                        auto normal_it = _spatial_hash.find(hash_point);
+                        auto dynamic_it = _spatial_hash_dynamic.find(hash_point);
 
-                        v2f _closest_point = (normal_dist < dynamic_dist) ? normal_hash_point : dynamic_hash_point;
-                        // v2f _closest_point = dynamic_hash_point;
+
+                        v2f _closest_point;
+                        if (normal_it != _spatial_hash.end() && dynamic_it != _spatial_hash_dynamic.end()) {
+                            v2f normal_hash_point = _spatial_hash[hash_point];
+                            float normal_dist = point.pos.distance_to(Vector2(normal_hash_point.x, normal_hash_point.y));
+                            v2f dynamic_hash_point = _spatial_hash_dynamic[hash_point];
+                            float dynamic_dist = point.pos.distance_to(Vector2(dynamic_hash_point.x, dynamic_hash_point.y));
+                            _closest_point = (normal_dist < dynamic_dist) ? normal_hash_point : dynamic_hash_point;
+                        }
+                        else if (normal_it != _spatial_hash.end()) {
+                            _closest_point = normal_it->second;
+                        }
+                        else if (dynamic_it != _spatial_hash_dynamic.end()) {
+                            _closest_point = dynamic_it->second;
+                        } else {
+                            continue;
+                        }
 
                         Vector2 cp = Vector2(_closest_point.x, _closest_point.y);
                         float distance = point.pos.distance_to(cp);
