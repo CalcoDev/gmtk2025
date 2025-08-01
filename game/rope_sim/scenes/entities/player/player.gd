@@ -1,7 +1,8 @@
 extends CharacterBody2D
 
 @export_group("References")
-@export var rope_handler: RopeHandler
+@export var _sprite: AnimatedSprite2D
+@export var _anim: AnimationPlayer
 
 @export_group("Movement")
 @export var max_speed: float = 200.0
@@ -24,15 +25,32 @@ func _ready() -> void:
     pass
 
 func _process(delta: float) -> void:
-    if InputManager.data.rope_attach.pressed:
-        rope_handler.try_attach()
-
     if not is_dashing and _dash_timer < 0.0 and InputManager.data.dash.pressed:
         _start_dash()
     _dash_timer -= delta
     if is_dashing:
         if _dash_timer < 0.0:
             _end_dash()
+    
+    if is_dashing:
+        # _anim.play("dash")
+        _sprite.play("dash")
+    else:
+        var inp := InputManager.data.move_vec
+        if inp.length_squared() > 0.01:
+            if abs(inp.y) > 0.01:
+                _sprite.play(&"run_front" if inp.y > 0 else &"run_back")
+            else:
+                _sprite.play(&"run_side")
+            _anim.play(&"waddle")
+            if inp.x > 0.0:
+                _sprite.flip_h = false
+            else:
+                _sprite.flip_h = true
+        else:
+            _anim.play(&"idle")
+            _sprite.stop()
+            _sprite.frame = 0
 
 var _pullback_prev_vel := Vector2.ZERO
 var _pulled_player_back := false
@@ -64,21 +82,6 @@ func _physics_process(delta: float) -> void:
 
     _prev_inp = inp
 
-    if rope_handler.is_attached():
-        var rope := rope_handler.get_rope()
-
-        var diff := rope.get_point(rope.get_point_count()-1) - global_position
-        var dist := rope.get_total_rope_distance()
-        var length := rope.length * 1.1
-        if dist > length:
-            var pushback := diff.normalized() * (dist - length - 2.0)
-            _pulled_player_back = true
-            _pullback_prev_vel = body.velocity
-            body.move_and_collide(pushback)
-        else:
-            _pulled_player_back = false
-
-        rope.set_point(rope.get_point_count()-1, global_position)
 
 func _start_dash() -> void:
     is_dashing = true
@@ -88,6 +91,13 @@ func _start_dash() -> void:
     var kcam := KCamera.get_active(self)
     kcam.shake_spring(-_dash_dir * 200, 200.0, 10.0, kcam.process_callback)
     kcam.shake_noise(5, 5, 0.15, true, kcam.process_callback)
+
+    var sparks := SparksRenderer.get_active(self)
+    var angle := _dash_dir.angle() + PI / 4.0 - (PI / 8.0 * (randf() + 0.5))
+    sparks.spawn_spark(global_position, Vector2(12.0, 6.0) / 2.0, angle, 500.0, 0.6)
+    sparks.spawn_spark(global_position, Vector2(12.0, 6.0) / 2.0, angle + PI, 500.0, 0.6)
+    for i in 8:
+        sparks.spawn_spark(global_position, Vector2(4.0, 4.0), randf() * TAU, 200.0, 0.3)
 
 func _end_dash() -> void:
     is_dashing = false

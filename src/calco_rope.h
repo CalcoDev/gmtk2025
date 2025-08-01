@@ -5,6 +5,8 @@
 #include <godot_cpp/classes/line2d.hpp>
 #include <godot_cpp/classes/shape_cast2d.hpp>
 
+#include <functional>
+
 namespace calco_rope_sim {
     struct RopePoint {
         godot::Vector2 pos;
@@ -12,6 +14,40 @@ namespace calco_rope_sim {
 
 		RopePoint() : pos(godot::Vector2(0, 0)), prev_pos(godot::Vector2(0, 0)) {}
         RopePoint(const godot::Vector2& position) : pos(position), prev_pos(position) {}
+    };
+
+	struct v2i {
+		int x;
+		int y;
+
+		v2i() : x(0.0), y(0.0) {}
+		v2i(const int p_x, const int p_y) : x(p_x), y(p_y) {}
+		v2i(const godot::Vector2i position) : x(position.x), y(position.y) {}
+
+		bool operator==(const v2i& other) const {
+            return x == other.x && y == other.y;
+        }
+	};
+	
+	struct v2f {
+		double x;
+		double y;
+
+		v2f() : x(0.0), y(0.0) {}
+		v2f(const double p_x, const double p_y) : x(p_x), y(p_y) {}
+		v2f(const godot::Vector2 position) : x(position.x), y(position.y) {}
+	};
+}
+
+namespace std {
+    template <>
+    struct hash<calco_rope_sim::v2i> {
+        std::size_t operator()(const calco_rope_sim::v2i& v) const noexcept {
+            // Combine the hash of x and y
+            std::size_t h1 = std::hash<int>{}(v.x);
+            std::size_t h2 = std::hash<int>{}(v.y);
+            return h1 ^ (h2 << 1); // Simple hash combination
+        }
     };
 }
 
@@ -40,8 +76,18 @@ private:
 	float _collision_radius;
 	float _bounce_factor;
 
+	bool _lasso_enabled;
+	float _lasso_diameter;
+
+	int _lasso_index;
+
+	float _lasso_circular_force_factor;
+
 	// private stuff
 	std::vector<calco_rope_sim::RopePoint> _points;
+	std::unordered_map<calco_rope_sim::v2i, calco_rope_sim::v2f> _spatial_hash;
+	std::unordered_map<calco_rope_sim::v2i, calco_rope_sim::v2f> _spatial_hash_dynamic;
+
 	float _total_rope_distance;
 
 	Vector2 _origin;
@@ -52,6 +98,15 @@ protected:
 public:
 	CalcoRope();
 	~CalcoRope();
+
+	void print_spatial_hash(Vector2 top_left, Vector2 bottom_right);
+	void update_spatial_hash(Vector2 top_left, Vector2 bottom_right);
+
+	void clear_spatial_hash_dyanmic();
+	// void update_spatial_hash_dynamic(Vector2 top_left, Vector2 bottom_right, int shape_type);
+	void update_spatial_hash_dynamic_obb(Vector2 center, Vector2 half_size, double theta);
+	void update_spatial_hash_dynamic_circle(Vector2 center, float radius);
+	// void update_spatial_hash_dynamic_capsule();
 
 	void update_simulation(double delta);
 	void render_simulation(double delta);
@@ -93,8 +148,18 @@ public:
     float get_bounce_factor() const;
     void set_bounce_factor(const float bounce_factor);
 
+    bool get_lasso_enabled() const;
+    void set_lasso_enabled(const bool lasso_enabled);
+    float get_lasso_diameter() const;
+    void set_lasso_diameter(const float lasso_diameter);
+
     Vector2 get_origin() const;
     void set_origin(const Vector2 origin);
+
+    float get_lasso_circular_force_factor() const;
+    void set_lasso_circular_force_factor(const float factor);
+
+	int get_lasso_index() const;
 };
 
 }

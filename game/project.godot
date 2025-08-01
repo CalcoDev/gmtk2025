@@ -12,7 +12,7 @@ config_version=5
 
 config/name="gmtk2025"
 config/description="game jam!!!!"
-run/main_scene="uid://clovvvq1w28ae"
+run/main_scene="uid://6su6g06obkka"
 config/features=PackedStringArray("4.4", "Forward Plus")
 run/max_fps=240
 config/icon="res://icon.svg"
@@ -23,8 +23,8 @@ InputManager="*res://common/scripts/input/input_manager.gd"
 
 [display]
 
-window/size/viewport_width=240
-window/size/viewport_height=240
+window/size/viewport_width=256
+window/size/viewport_height=256
 window/size/window_width_override=1280
 window/size/window_height_override=1280
 window/stretch/mode="viewport"
@@ -60,6 +60,11 @@ dash={
 rope_attach={
 "deadzone": 0.2,
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":69,"key_label":0,"unicode":101,"location":0,"echo":false,"script":null)
+]
+}
+lasso_hold={
+"deadzone": 0.2,
+"events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":1,"position":Vector2(237, 16),"global_position":Vector2(250, 81),"factor":1.0,"button_index":1,"canceled":false,"pressed":true,"double_click":false,"script":null)
 ]
 }
 

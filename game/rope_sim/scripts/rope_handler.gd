@@ -33,8 +33,18 @@ func get_rope() -> CalcoRope:
 func _ready() -> void:
     rope_attacher_area.area_entered.connect(_on_rope_attacher_enter)
     rope_attacher_area.area_exited.connect(_on_rope_attacher_exit)
+    var v := Vector2(-480, -480)
+    rope.update_spatial_hash(v, -v)
 
 func _physics_process(_delta: float) -> void:
+    # rope.clear_spatial_hash_dyanmic()
+    if Input.is_action_pressed("lasso_hold"):
+        # var k := rope.get_lasso_index()
+        rope.damp_factor = 0.999
+        rope.set_point(rope.point_count - 1, get_global_mouse_position())
+    else:
+        rope.damp_factor = 0.98
+        # pass
     rope.origin = get_parent().global_position
 
 func _on_rope_attacher_enter(other: Area2D) -> void:

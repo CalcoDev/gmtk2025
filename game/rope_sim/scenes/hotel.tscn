@@ -1,0 +1,51 @@
+[gd_scene load_steps=7 format=3 uid="uid://ck2t02mha76xg"]
+
+[ext_resource type="Script" uid="uid://cqof6kdlctftf" path="res://common/scripts/kcamera.gd" id="1_vr0fr"]
+[ext_resource type="Script" uid="uid://m4bdl7f61us0" path="res://rope_sim/scenes/entities/player/player.gd" id="2_y1rf1"]
+[ext_resource type="Texture2D" uid="uid://djb08mxi82uca" path="res://hilberts_hotel/assets/player.png" id="3_qf8bt"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ro4wo"]
+radius = 5.0
+height = 10.0
+
+[sub_resource type="Gradient" id="Gradient_y1rf1"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_qf8bt"]
+gradient = SubResource("Gradient_y1rf1")
+
+[node name="Hotel" type="Node2D"]
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_left = -233.0
+offset_top = -167.0
+offset_right = 233.0
+offset_bottom = 167.0
+color = Color(0, 0, 0, 1)
+
+[node name="KCamera" type="Camera2D" parent="."]
+script = ExtResource("1_vr0fr")
+metadata/_custom_type_script = "uid://cqof6kdlctftf"
+
+[node name="Player" type="CharacterBody2D" parent="."]
+y_sort_enabled = true
+collision_layer = 4
+collision_mask = 3
+motion_mode = 1
+script = ExtResource("2_y1rf1")
+dash_duration = 0.1
+dash_speed = 60.0
+
+[node name="Sprite2D" type="Sprite2D" parent="Player"]
+texture = ExtResource("3_qf8bt")
+offset = Vector2(0, -5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+position = Vector2(0, -5)
+shape = SubResource("CapsuleShape2D_ro4wo")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(-92, -4)
+texture = SubResource("GradientTexture2D_qf8bt")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.192599, 0.192599, 0.192599, 1)
