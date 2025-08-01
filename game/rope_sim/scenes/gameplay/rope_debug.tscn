@@ -47,14 +47,15 @@ collision_mask = 65
 line_path = NodePath("../Line2D")
 shape_cast_path = NodePath("../ShapeCast2D")
 gravity = Vector2(0, 0)
-constraint_run_count = 200
-collision_run_interval = 3
-collision_radius = 4.0
+constraint_run_count = 500
+collision_run_interval = 2
+collision_radius = 2.0
 point_count = 250
-length = 200.0
+length = 100.0
+lasso_circular_force_factor = 0.1
 
-[node name="Player" parent="YSort" node_paths=PackedStringArray("rope_handler") instance=ExtResource("2_fjyik")]
-rope_handler = NodePath("RopeHandler")
+[node name="Player" parent="YSort" node_paths=PackedStringArray("_rope_handler") instance=ExtResource("2_fjyik")]
+_rope_handler = NodePath("RopeHandler")
 
 [node name="RopeHandler" type="Node2D" parent="YSort/Player" node_paths=PackedStringArray("rope", "rope_attacher_area")]
 script = ExtResource("3_t1uni")

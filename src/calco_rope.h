@@ -76,6 +76,13 @@ private:
 	float _collision_radius;
 	float _bounce_factor;
 
+	bool _lasso_enabled;
+	float _lasso_diameter;
+
+	int _lasso_index;
+
+	float _lasso_circular_force_factor;
+
 	// private stuff
 	std::vector<calco_rope_sim::RopePoint> _points;
 	std::unordered_map<calco_rope_sim::v2i, calco_rope_sim::v2f> _spatial_hash;
@@ -141,8 +148,18 @@ public:
     float get_bounce_factor() const;
     void set_bounce_factor(const float bounce_factor);
 
+    bool get_lasso_enabled() const;
+    void set_lasso_enabled(const bool lasso_enabled);
+    float get_lasso_diameter() const;
+    void set_lasso_diameter(const float lasso_diameter);
+
     Vector2 get_origin() const;
     void set_origin(const Vector2 origin);
+
+    float get_lasso_circular_force_factor() const;
+    void set_lasso_circular_force_factor(const float factor);
+
+	int get_lasso_index() const;
 };
 
 }

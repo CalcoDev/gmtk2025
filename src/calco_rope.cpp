@@ -41,6 +41,14 @@ void CalcoRope::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_bounce_factor", "bounce_factor"), &CalcoRope::set_bounce_factor);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "bounce_factor"), "set_bounce_factor", "get_bounce_factor");
 
+    ClassDB::bind_method(D_METHOD("get_lasso_enabled"), &CalcoRope::get_lasso_enabled);
+    ClassDB::bind_method(D_METHOD("set_lasso_enabled", "lasso_enabled"), &CalcoRope::set_lasso_enabled);
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "lasso_enabled"), "set_lasso_enabled", "get_lasso_enabled");
+
+    ClassDB::bind_method(D_METHOD("get_lasso_diameter"), &CalcoRope::get_lasso_diameter);
+    ClassDB::bind_method(D_METHOD("set_lasso_diameter", "lasso_diameter"), &CalcoRope::set_lasso_diameter);
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "lasso_diameter"), "set_lasso_diameter", "get_lasso_diameter");
+
 	ClassDB::bind_method(D_METHOD("get_point_count"), &CalcoRope::get_point_count);
     ClassDB::bind_method(D_METHOD("set_point_count", "point_count"), &CalcoRope::set_point_count);
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "point_count"), "set_point_count", "get_point_count");
@@ -61,6 +69,12 @@ void CalcoRope::_bind_methods() {
     ClassDB::bind_method(D_METHOD("clear_spatial_hash_dyanmic"), &CalcoRope::clear_spatial_hash_dyanmic);
     ClassDB::bind_method(D_METHOD("update_spatial_hash_dynamic_obb", "center", "half_size", "theta"), &CalcoRope::update_spatial_hash_dynamic_obb);
     ClassDB::bind_method(D_METHOD("update_spatial_hash_dynamic_circle", "center", "radius"), &CalcoRope::update_spatial_hash_dynamic_circle);
+    
+    ClassDB::bind_method(D_METHOD("get_lasso_circular_force_factor"), &CalcoRope::get_lasso_circular_force_factor);
+    ClassDB::bind_method(D_METHOD("set_lasso_circular_force_factor", "lasso_circular_force_factor"), &CalcoRope::set_lasso_circular_force_factor);
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "lasso_circular_force_factor"), "set_lasso_circular_force_factor", "get_lasso_circular_force_factor");
+
+    ClassDB::bind_method(D_METHOD("get_lasso_index"), &CalcoRope::get_lasso_index);
 }
 
 CalcoRope::CalcoRope() {
@@ -72,7 +86,10 @@ CalcoRope::CalcoRope() {
     _collision_run_interval = 5;
     _collision_radius = 1.0f;
     _bounce_factor = 0.1f;
+    _lasso_enabled = false;
+    _lasso_diameter = 10.0f;
     _total_rope_distance = 0.0f;
+    _lasso_circular_force_factor = 1.0f; // Default value
 }
 
 CalcoRope::~CalcoRope() {
@@ -267,6 +284,39 @@ void CalcoRope::update_simulation(double delta) {
             _points[i + 2].pos += change;
         }
 
+        if (_lasso_enabled) {
+            point_diff = _points[_point_count - 1].pos - _points[_lasso_index].pos;
+            diff = point_diff.length() - get_segment_length();
+            change = point_diff.normalized() * diff * 0.5f;
+            _points[_point_count - 1].pos -= change;
+            _points[_lasso_index].pos += change;
+
+            if (_lasso_circular_force_factor > 0.0) {
+                Vector2 center = Vector2(0, 0);
+                int loop_point_count = _point_count - _lasso_index;
+                for (int i = _lasso_index; i < _point_count; ++i) {
+                    center += _points[i].pos;
+                }
+                center /= static_cast<float>(loop_point_count);
+
+                // Target radius based on lasso diameter
+                float target_radius = _lasso_diameter / 2.0f;
+
+                // Apply outward/inward correction to each loop point
+                for (int i = _lasso_index; i < _point_count; ++i) {
+                    Vector2 to_point = _points[i].pos - center;
+                    float current_distance = to_point.length();
+                    if (current_distance > 0.0f) { // Avoid division by zero
+                        Vector2 radial_dir = to_point / current_distance;
+                        float distance_diff = target_radius - current_distance;
+                        // Apply small correction along radial direction
+                        Vector2 correction = radial_dir * (distance_diff * _lasso_circular_force_factor);
+                        _points[i].pos += correction;
+                    }
+                }
+            }
+        }
+
         if (ic % _collision_run_interval == 0) {
             for (RopePoint& point : _points) {
                 Vector2 vel = point.pos - point.prev_pos;
@@ -309,9 +359,6 @@ void CalcoRope::update_simulation(double delta) {
                 }
 
                 if (min_dist < _collision_radius) {
-                    if (ic == 0) {
-                        // godot::print_line(point.pos, " | ", grid_cell, " | ", closest_point.x, " ", closest_point.y);
-                    }
                     Vector2 normal = (point.pos - closest_point).normalized();
                     float depth = _collision_radius - min_dist;
                     point.pos += normal * depth;
@@ -437,10 +484,42 @@ void CalcoRope::set_bounce_factor(const float bounce_factor) {
     _bounce_factor = bounce_factor;
 }
 
+bool CalcoRope::get_lasso_enabled() const {
+    return _lasso_enabled;
+}
+
+void CalcoRope::set_lasso_enabled(const bool lasso_enabled) {
+    _lasso_enabled = lasso_enabled;
+}
+
+float CalcoRope::get_lasso_diameter() const {
+    return _lasso_diameter;
+}
+
+void CalcoRope::set_lasso_diameter(const float lasso_diameter) {
+    _lasso_diameter = lasso_diameter;
+
+    float segment_length = get_segment_length();
+    int loop_segments = (int)(std::floor(3.14159 * lasso_diameter / segment_length));
+    _lasso_index = _point_count - loop_segments;
+}
+
+float CalcoRope::get_lasso_circular_force_factor() const {
+    return _lasso_circular_force_factor;
+}
+
+void CalcoRope::set_lasso_circular_force_factor(const float factor) {
+    _lasso_circular_force_factor = factor;
+}
+
 Vector2 CalcoRope::get_origin() const {
     return _origin;
 }
 
 void CalcoRope::set_origin(const Vector2 origin) {
     _origin = origin;
+}
+
+int CalcoRope::get_lasso_index() const {
+    return _lasso_index;
 }

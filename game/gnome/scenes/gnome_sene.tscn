@@ -1,0 +1,327 @@
+[gd_scene load_steps=26 format=4 uid="uid://6su6g06obkka"]
+
+[ext_resource type="Script" uid="uid://cqof6kdlctftf" path="res://common/scripts/kcamera.gd" id="1_8odw5"]
+[ext_resource type="Script" uid="uid://dtbfefgg2abbx" path="res://gnome/scripts/sparks/sparks_renderer.gd" id="1_vlkyo"]
+[ext_resource type="TileSet" uid="uid://cosl0onm74clr" path="res://gnome/resources/tilesets/shadow_tileset.tres" id="2_8bm2q"]
+[ext_resource type="Script" uid="uid://m4bdl7f61us0" path="res://rope_sim/scenes/entities/player/player.gd" id="2_jqicl"]
+[ext_resource type="Texture2D" uid="uid://c587qe4coctj3" path="res://gnome/assets/images/player/gnome_spritesheet.png" id="2_k1dfr"]
+[ext_resource type="Texture2D" uid="uid://chbtfhtmstlnl" path="res://gnome/assets/images/player/gnome_dash.png" id="3_5av11"]
+[ext_resource type="Texture2D" uid="uid://dp0a438jgd5h1" path="res://gnome/assets/images/intro/hote_entrance_floor_2.png" id="3_opl4i"]
+
+[sub_resource type="Animation" id="Animation_k1dfr"]
+resource_name = "idle"
+loop_mode = 1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals:rotation")
+tracks/1/interp = 4
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals:scale")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 0.9), Vector2(1, 1.1)]
+}
+
+[sub_resource type="Animation" id="Animation_jqicl"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals:rotation")
+tracks/1/interp = 4
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals:scale")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_5av11"]
+resource_name = "waddle"
+length = 0.5
+loop_mode = 1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals:rotation")
+tracks/1/interp = 4
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.45),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, -0.127216, 6.42347]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals:scale")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.35),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.20921, 0.809733), Vector2(1.02716, 0.936949)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_jqicl"]
+_data = {
+&"RESET": SubResource("Animation_jqicl"),
+&"idle": SubResource("Animation_k1dfr"),
+&"waddle": SubResource("Animation_5av11")
+}
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5fehg"]
+atlas = ExtResource("3_5av11")
+region = Rect2(0, 0, 22, 34)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jqicl"]
+atlas = ExtResource("2_k1dfr")
+region = Rect2(0, 72, 16, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5av11"]
+atlas = ExtResource("2_k1dfr")
+region = Rect2(16, 72, 16, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vlkyo"]
+atlas = ExtResource("2_k1dfr")
+region = Rect2(32, 72, 16, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_opl4i"]
+atlas = ExtResource("2_k1dfr")
+region = Rect2(0, 0, 16, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8bm2q"]
+atlas = ExtResource("2_k1dfr")
+region = Rect2(16, 0, 16, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x04xn"]
+atlas = ExtResource("2_k1dfr")
+region = Rect2(32, 0, 16, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4xp1x"]
+atlas = ExtResource("2_k1dfr")
+region = Rect2(0, 36, 16, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l5885"]
+atlas = ExtResource("2_k1dfr")
+region = Rect2(16, 36, 16, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q303y"]
+atlas = ExtResource("2_k1dfr")
+region = Rect2(32, 36, 16, 36)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5fehg"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5fehg")
+}],
+"loop": true,
+"name": &"dash",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jqicl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5av11")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vlkyo")
+}],
+"loop": true,
+"name": &"run_back",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_opl4i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8bm2q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x04xn")
+}],
+"loop": true,
+"name": &"run_front",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4xp1x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l5885")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q303y")
+}],
+"loop": true,
+"name": &"run_side",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5av11"]
+radius = 4.0
+
+[sub_resource type="Gradient" id="Gradient_8bm2q"]
+offsets = PackedFloat32Array(0, 0.780939)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_x04xn"]
+gradient = SubResource("Gradient_8bm2q")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[node name="GnomeSene" type="Node2D"]
+
+[node name="Intro" type="Sprite2D" parent="."]
+position = Vector2(-31, -34)
+texture = ExtResource("3_opl4i")
+centered = false
+
+[node name="Hotel" type="StaticBody2D" parent="Intro"]
+position = Vector2(32, 32)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Intro/Hotel"]
+polygon = PackedVector2Array(93, 108, 96, 97, 125, 97, 131, 102, 131, 127, 145, 127, 150, 101, 163, 78, 166, -26, 60, -27, 62, 80, 75, 101)
+
+[node name="Fence" type="StaticBody2D" parent="Intro"]
+position = Vector2(32, 32)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Intro/Fence"]
+polygon = PackedVector2Array(93, 129, 95, 103, 84, 99, 83, 109, 73, 107, 65, 93, 54, 88, 51, 74, 50, 42, 49, 0, 38, 1, 40, 94, 52, 99, 57, 102, 56, 115, 64, 121, 65, 107, 70, 118, 82, 119, 81, 126)
+
+[node name="Busses" type="StaticBody2D" parent="Intro"]
+position = Vector2(32, 32)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Intro/Busses"]
+polygon = PackedVector2Array(164, 60, 448, 63, 451, 99, 156, 97)
+
+[node name="Bounds" type="StaticBody2D" parent="Intro"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Intro/Bounds"]
+position = Vector2(4, 4)
+build_mode = 1
+polygon = PackedVector2Array(12, 34, 565, 34, 564, 310, 13, 309)
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray("AAD//wEAAAADAAEAAAD//wIAAAADAAEAAAD//wMAAAAAAAEAAAD//wQAAAAAAAEAAAD//wUAAAAAAAEAAAD//wYAAAAAAAEAAAD//wcAAAAAAAEAAAD//wgAAAAAAAIAAAAAAAgAAAABAAIAAAABAAgAAAABAAIAAAACAAgAAAABAAIAAAADAAgAAAABAAIAAAAEAAgAAAABAAIAAAAFAAgAAAABAAIAAAAGAAgAAAABAAIAAAAHAAgAAAABAAIAAAAIAAgAAAABAAIAAAAJAAgAAAABAAIAAAAKAAgAAAABAAIAAAALAAgAAAABAAIAAAAMAAgAAAABAAIAAAANAAgAAAABAAIAAAAOAAgAAAABAAIAAAAPAAgAAAABAAIAAAAQAAgAAAACAAIAAAARAAgAAAADAAEAAAASAAgAAAADAAEAAAATAAgAAAABAAIAAAAUAAgAAAABAAIAAAAVAAgAAAABAAIAAAAWAAgAAAABAAIAAAAQAAcAAAACAAEAAAAQAAYAAAACAAEAAAAQAAUAAAACAAEAAAAQAAQAAAACAAEAAAAQAAMAAAACAAEAAAAQAAIAAAACAAEAAAAQAAEAAAACAAEAAAAQAAAAAAACAAAAAAAPAAAAAAABAAAAAAAOAAAAAAABAAAAAAANAAAAAAABAAAAAAAMAAAAAAABAAAAAAALAAAAAAABAAAAAAAKAAAAAAABAAAAAAAJAAAAAAABAAAAAAAIAAAAAAABAAAAAAAHAAAAAAABAAAAAAAGAAAAAAABAAAAAAAFAAAAAAABAAAAAAABAAAAAAABAAAAAAAAAAAAAAABAAAAAAD//wAAAAADAAEAAAD/////AAADAAEAAAAAAP//AAADAAEAAAABAP//AAADAAEAAAAFAP//AAADAAEAAAAGAP//AAADAAEAAAAHAP//AAADAAEAAAAIAP//AAADAAEAAAAJAP//AAADAAEAAAAKAP//AAADAAEAAAALAP//AAADAAEAAAAMAP//AAADAAEAAAANAP//AAADAAEAAAAOAP//AAADAAEAAAAPAP//AAADAAEAAAAQAP//AAADAAEAAAARAP//AAADAAEAAAARAAAAAAADAAEAAAARAAEAAAADAAEAAAARAAIAAAADAAEAAAARAAMAAAADAAEAAAARAAQAAAADAAEAAAARAAUAAAADAAEAAAARAAYAAAADAAEAAAARAAcAAAADAAEAAAASAAcAAAADAAEAAAASAAYAAAADAAEAAAASAAUAAAADAAEAAAASAAQAAAADAAEAAAASAAMAAAADAAEAAAASAAIAAAADAAEAAAASAAEAAAADAAEAAAASAAAAAAADAAEAAAASAP//AAADAAEAAAASAAkAAAADAAEAAAARAAkAAAADAAEAAAAQAAkAAAADAAEAAAAPAAkAAAADAAEAAAAOAAkAAAADAAEAAAANAAkAAAADAAEAAAAMAAkAAAADAAEAAAALAAkAAAADAAEAAAAKAAkAAAADAAEAAAAJAAkAAAADAAEAAAAIAAkAAAADAAEAAAAHAAkAAAADAAEAAAAGAAkAAAADAAEAAAAFAAkAAAADAAEAAAAEAAkAAAADAAEAAAADAAkAAAADAAEAAAACAAkAAAADAAEAAAABAAkAAAADAAEAAAAAAAkAAAADAAEAAAD//wkAAAADAAEAAAD+/wkAAAADAAEAAAD+/wgAAAADAAEAAAD+/wcAAAADAAEAAAD+/wYAAAADAAEAAAD+/wUAAAADAAEAAAD+/wQAAAADAAEAAAD+/wMAAAADAAEAAAD+/wIAAAADAAEAAAD///7/AAADAAEAAAD+////AAADAAEAAAD+/wAAAAADAAEAAAD+/wEAAAADAAEAAAAAAP7/AAADAAEAAAABAP7/AAADAAEAAAACAP7/AAADAAEAAAADAP7/AAADAAEAAAAEAP7/AAADAAEAAAAFAP7/AAADAAEAAAAGAP7/AAADAAEAAAAHAP7/AAADAAEAAAAIAP7/AAADAAEAAAD+//7/AAADAAEAAAAJAP7/AAADAAEAAAAKAP7/AAADAAEAAAARAP7/AAADAAEAAAASAP7/AAADAAEAAAAQAP7/AAADAAEAAAAPAP7/AAADAAEAAAAOAP7/AAADAAEAAAANAP7/AAADAAEAAAAMAP7/AAADAAEAAAALAP7/AAADAAEAAAA=")
+tile_set = ExtResource("2_8bm2q")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." node_paths=PackedStringArray("_sprite", "_anim")]
+position = Vector2(128, 128)
+motion_mode = 1
+script = ExtResource("2_jqicl")
+_sprite = NodePath("Visuals/AnimatedSprite2D")
+_anim = NodePath("AnimationPlayer")
+dash_speed = 60.0
+
+[node name="KCamera" type="Camera2D" parent="CharacterBody2D"]
+limit_left = -16
+limit_top = -16
+limit_right = 528
+limit_bottom = 272
+script = ExtResource("1_8odw5")
+metadata/_custom_type_script = "uid://cqof6kdlctftf"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CharacterBody2D"]
+libraries = {
+&"": SubResource("AnimationLibrary_jqicl")
+}
+autoplay = "idle"
+
+[node name="Visuals" type="Node2D" parent="CharacterBody2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterBody2D/Visuals"]
+sprite_frames = SubResource("SpriteFrames_5fehg")
+animation = &"run_side"
+offset = Vector2(0, -14)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+shape = SubResource("CircleShape2D_5av11")
+
+[node name="PointLight2D" type="PointLight2D" parent="CharacterBody2D"]
+color = Color(0.783, 0.58, 1, 1)
+energy = 2.0
+texture = SubResource("GradientTexture2D_x04xn")
+height = 10.0
+
+[node name="SparksRenderer" type="Node2D" parent="."]
+script = ExtResource("1_vlkyo")
+metadata/_custom_type_script = "uid://dtbfefgg2abbx"
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.22915, 0.120214, 0.341651, 1)
