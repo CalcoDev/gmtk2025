@@ -1,0 +1,35 @@
+[gd_scene load_steps=7 format=3 uid="uid://dmxry1vmjcnnb"]
+
+[ext_resource type="PackedScene" uid="uid://dwye76nm3a4ia" path="res://gnome/scenes/dialogue/textbox.tscn" id="1_e0aar"]
+[ext_resource type="Script" uid="uid://b0kftk28oeafl" path="res://gnome/scenes/managers/dialogue/dialogue_manager.gd" id="1_qq8nt"]
+[ext_resource type="Script" uid="uid://cn45uf0ufx8xg" path="res://gnome/scenes/dialogue/textbox/views/text_box_display_view.gd" id="2_qq8nt"]
+[ext_resource type="Script" uid="uid://c8skvpvkv8xn6" path="res://gnome/scenes/dialogue/textbox/views/text_box_line_view.gd" id="3_5snun"]
+[ext_resource type="Script" uid="uid://bp6m5widhgbnl" path="res://gnome/scripts/dialogue/core/dialogue_runner.gd" id="3_548ne"]
+[ext_resource type="Script" uid="uid://bic43dhixu6om" path="res://gnome/scenes/dialogue/textbox/views/text_box_options_view.gd" id="4_548ne"]
+
+[node name="DialogueManager" type="Node" node_paths=PackedStringArray("text_box", "r")]
+script = ExtResource("1_qq8nt")
+text_box = NodePath("CanvasLayer/Textbox")
+r = NodePath("CanvasLayer/DialogueRunner")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Textbox" parent="CanvasLayer" instance=ExtResource("1_e0aar")]
+
+[node name="DialogueRunner" type="Node" parent="CanvasLayer" node_paths=PackedStringArray("dialogue_views")]
+script = ExtResource("3_548ne")
+dialogue_views = [NodePath("../TextboxDisplayView"), NodePath("../TextboxLineView"), NodePath("../TextboxOptionsView")]
+speakers_directory = "res://gnome/resources/speakers"
+metadata/_custom_type_script = "uid://bp6m5widhgbnl"
+
+[node name="TextboxDisplayView" type="Node" parent="CanvasLayer" node_paths=PackedStringArray("text_box")]
+script = ExtResource("2_qq8nt")
+text_box = NodePath("../Textbox")
+
+[node name="TextboxLineView" type="Node" parent="CanvasLayer" node_paths=PackedStringArray("text_box")]
+script = ExtResource("3_5snun")
+text_box = NodePath("../Textbox")
+
+[node name="TextboxOptionsView" type="Node" parent="CanvasLayer" node_paths=PackedStringArray("text_box")]
+script = ExtResource("4_548ne")
+text_box = NodePath("../Textbox")

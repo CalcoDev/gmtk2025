@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://btikjdp737dfd"]
+[gd_scene load_steps=21 format=3 uid="uid://btikjdp737dfd"]
 
 [ext_resource type="Script" uid="uid://m4bdl7f61us0" path="res://rope_sim/scenes/entities/player/player.gd" id="1_cdvh4"]
 [ext_resource type="Texture2D" uid="uid://chbtfhtmstlnl" path="res://gnome/assets/images/player/gnome_dash.png" id="2_uvwwy"]
@@ -228,26 +228,19 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_5av11"]
-radius = 4.0
+radius = 6.0
 
-[sub_resource type="Gradient" id="Gradient_8bm2q"]
-offsets = PackedFloat32Array(0, 0.780939)
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_x04xn"]
-gradient = SubResource("Gradient_8bm2q")
-width = 256
-height = 256
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(1, 0.5)
-
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("_sprite", "_anim", "_interactor")]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("_sprite", "_anim", "frick_you_room", "_interactor")]
+visibility_layer = 9
+y_sort_enabled = true
+collision_layer = 4
+collision_mask = 3
 motion_mode = 1
 script = ExtResource("1_cdvh4")
 _sprite = NodePath("Visuals/AnimatedSprite2D")
 _anim = NodePath("AnimationPlayer")
 dash_speed = 60.0
+frick_you_room = NodePath("")
 _interactor = NodePath("InteractorComponent")
 interactor_offset = 20.0
 
@@ -258,21 +251,24 @@ libraries = {
 autoplay = "idle"
 
 [node name="Visuals" type="Node2D" parent="."]
+visibility_layer = 9
+y_sort_enabled = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Visuals"]
+visibility_layer = 9
+y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_5fehg")
 animation = &"run_side"
 offset = Vector2(0, -14)
 
 [node name="Sprite2D" type="Sprite2D" parent="Visuals"]
+visibility_layer = 9
+y_sort_enabled = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visibility_layer = 9
+position = Vector2(0, -4)
 shape = SubResource("CircleShape2D_5av11")
-
-[node name="PointLight2D" type="PointLight2D" parent="."]
-texture = SubResource("GradientTexture2D_x04xn")
-texture_scale = 0.8
-height = 10.0
 
 [node name="InteractorComponent" type="RayCast2D" parent="."]
 target_position = Vector2(0, 10)

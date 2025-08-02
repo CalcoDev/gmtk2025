@@ -1,0 +1,176 @@
+[gd_scene load_steps=9 format=3 uid="uid://dwye76nm3a4ia"]
+
+[ext_resource type="Script" uid="uid://ccbjk4t0beicp" path="res://gnome/scenes/dialogue/textbox.gd" id="1_igcr5"]
+[ext_resource type="Texture2D" uid="uid://cmx42u1t0aam" path="res://gnome/assets/images/dialogue/background_fade.png" id="2_5l3gt"]
+[ext_resource type="Texture2D" uid="uid://dolipm2cyuvl5" path="res://gnome/assets/images/dialogue/speaker_box_outline.png" id="3_y14s2"]
+[ext_resource type="Texture2D" uid="uid://db71hpqnlsan2" path="res://gnome/assets/images/dialogue/speaker_icon_debug.png" id="4_wy51d"]
+[ext_resource type="FontFile" uid="uid://dgt440a4uhfjn" path="res://gnome/resources/fonts/04B_11.TTF" id="5_7dhsi"]
+[ext_resource type="Texture2D" uid="uid://cvw3vmwp1b6hu" path="res://gnome/assets/images/dialogue/speaker_box_line_thing.png" id="6_go646"]
+[ext_resource type="FontFile" uid="uid://cd8p4stcdkq61" path="res://gnome/resources/fonts/04B_03.TTF" id="7_4xdc5"]
+[ext_resource type="Texture2D" uid="uid://b37t2i7cgd2jl" path="res://gnome/assets/images/dialogue/option_selected.png" id="8_8w44l"]
+
+[node name="Textbox" type="Control" node_paths=PackedStringArray("title_lbl", "text_lbl", "speaker_outline", "speaker_icon", "title_line", "options_container")]
+layout_mode = 3
+anchors_preset = 0
+offset_top = 172.0
+offset_right = 256.0
+offset_bottom = 256.0
+script = ExtResource("1_igcr5")
+title_lbl = NodePath("MarginContainer/HBoxContainer/VBoxContainer/SpeakerName")
+text_lbl = NodePath("MarginContainer/HBoxContainer/VBoxContainer/Text")
+speaker_outline = NodePath("MarginContainer/HBoxContainer/SpeakerBoxOutline")
+speaker_icon = NodePath("MarginContainer/HBoxContainer/SpeakerBoxOutline/SpeakerIcon")
+title_line = NodePath("MarginContainer/HBoxContainer/VBoxContainer/LineThingy")
+options_container = NodePath("MarginContainer/HBoxContainer/VBoxContainer/OptionsCcontainer")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_5l3gt")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="SpeakerBoxOutline" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("3_y14s2")
+
+[node name="SpeakerIcon" type="TextureRect" parent="MarginContainer/HBoxContainer/SpeakerBoxOutline"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_wy51d")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 1
+
+[node name="SpeakerName" type="RichTextLabel" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("5_7dhsi")
+text = "Gnome"
+fit_content = true
+
+[node name="LineThingy" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+texture = ExtResource("6_go646")
+stretch_mode = 2
+
+[node name="Text" type="RichTextLabel" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_fonts/normal_font = ExtResource("7_4xdc5")
+theme_override_font_sizes/normal_font_size = 8
+text = "Hello ah yes this is some dialogue with some sentences and more things I guess.
+This is quite a lot of text for one panel."
+
+[node name="OptionsCcontainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="1" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/OptionsCcontainer"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/OptionsCcontainer/1"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("8_8w44l")
+stretch_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/HBoxContainer/VBoxContainer/OptionsCcontainer/1"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/normal_font = ExtResource("7_4xdc5")
+theme_override_font_sizes/normal_font_size = 8
+bbcode_enabled = true
+text = "Option 1"
+fit_content = true
+scroll_active = false
+
+[node name="2" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/OptionsCcontainer"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/OptionsCcontainer/2"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("8_8w44l")
+stretch_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/HBoxContainer/VBoxContainer/OptionsCcontainer/2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/normal_font = ExtResource("7_4xdc5")
+theme_override_font_sizes/normal_font_size = 8
+bbcode_enabled = true
+text = "Option 2"
+fit_content = true
+scroll_active = false
+
+[node name="3" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/OptionsCcontainer"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/OptionsCcontainer/3"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("8_8w44l")
+stretch_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/HBoxContainer/VBoxContainer/OptionsCcontainer/3"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/normal_font = ExtResource("7_4xdc5")
+theme_override_font_sizes/normal_font_size = 8
+bbcode_enabled = true
+text = "Option 3"
+fit_content = true
+scroll_active = false
+
+[node name="4" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/OptionsCcontainer"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/OptionsCcontainer/4"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("8_8w44l")
+stretch_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/HBoxContainer/VBoxContainer/OptionsCcontainer/4"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/normal_font = ExtResource("7_4xdc5")
+theme_override_font_sizes/normal_font_size = 8
+bbcode_enabled = true
+text = "Option 4"
+fit_content = true
+scroll_active = false

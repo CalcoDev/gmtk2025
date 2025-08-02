@@ -1,0 +1,6 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://d2ieta5y7qctr"]
+
+[ext_resource type="Shader" uid="uid://dsh1akob0wxgp" path="res://gnome/shaders/schizo_room_hidden_cutout.gdshader" id="1_iltrg"]
+
+[resource]
+shader = ExtResource("1_iltrg")

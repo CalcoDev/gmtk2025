@@ -1,0 +1,124 @@
+[gd_scene load_steps=12 format=3 uid="uid://di38mmxmbkshk"]
+
+[ext_resource type="Script" uid="uid://xyxfnjqqce7k" path="res://gnome/scenes/_debug/schizo_room_debug.gd" id="1_mgu8n"]
+[ext_resource type="PackedScene" uid="uid://bmg2s3wcbk6vk" path="res://gnome/scenes/gameplay/schizo_rooms/scene.tscn" id="2_wmmid"]
+[ext_resource type="Script" uid="uid://cwa5lk4vvkb6r" path="res://gnome/scenes/_debug/viewport_frick.gd" id="14_kdyjf"]
+[ext_resource type="Shader" uid="uid://chm6nn5l4ohry" path="res://gnome/shaders/schizo_room_blitter.gdshader" id="14_smdbc"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_mgu8n"]
+viewport_path = NodePath("Colors")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_smdbc"]
+viewport_path = NodePath("Lights")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_okeh7"]
+viewport_path = NodePath("CurrentRoom")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_cx5o7"]
+viewport_path = NodePath("CurrentRoom")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_kdyjf"]
+viewport_path = NodePath("Lights")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_030ah"]
+viewport_path = NodePath("Colors")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kdyjf"]
+resource_local_to_scene = true
+shader = ExtResource("14_smdbc")
+shader_parameter/u_tex = SubResource("ViewportTexture_030ah")
+shader_parameter/u_mask_tex = SubResource("ViewportTexture_kdyjf")
+shader_parameter/u_mask_mask_tex = SubResource("ViewportTexture_cx5o7")
+
+[node name="SchizoRoomDebug" type="Node2D" node_paths=PackedStringArray("colors_vp", "light_vp", "room_vp")]
+script = ExtResource("1_mgu8n")
+colors_vp = NodePath("Colors")
+light_vp = NodePath("Lights")
+room_vp = NodePath("CurrentRoom")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(0.25, 0.25)
+
+[node name="Colors" type="SubViewport" parent="."]
+disable_3d = true
+transparent_bg = true
+handle_input_locally = false
+snap_2d_transforms_to_pixel = true
+snap_2d_vertices_to_pixel = true
+canvas_item_default_texture_filter = 0
+canvas_cull_mask = 4294967279
+render_target_update_mode = 4
+
+[node name="Scene" parent="Colors" instance=ExtResource("2_wmmid")]
+
+[node name="Room1" parent="Colors/Scene" index="2" node_paths=PackedStringArray("pathways")]
+pathways = {
+"left": NodePath("Pathways/Marker2D"),
+"right": NodePath("Pathways/Marker2D2")
+}
+
+[node name="Room11" parent="Colors/Scene" index="3" node_paths=PackedStringArray("pathways")]
+pathways = {
+"left": NodePath("Pathways/Left"),
+"right": NodePath("Pathways/Left2")
+}
+
+[node name="Lights" type="SubViewport" parent="."]
+disable_3d = true
+transparent_bg = true
+handle_input_locally = false
+snap_2d_transforms_to_pixel = true
+snap_2d_vertices_to_pixel = true
+canvas_item_default_texture_filter = 0
+canvas_cull_mask = 4293918736
+
+[node name="Camera2D" type="Camera2D" parent="Lights" node_paths=PackedStringArray("cam")]
+script = ExtResource("14_kdyjf")
+cam = NodePath("../../Colors/Scene/CameraFollow/KCamera")
+
+[node name="CurrentRoom" type="SubViewport" parent="."]
+disable_3d = true
+transparent_bg = true
+handle_input_locally = false
+snap_2d_transforms_to_pixel = true
+snap_2d_vertices_to_pixel = true
+canvas_cull_mask = 4293918728
+
+[node name="Camera2D" type="Camera2D" parent="CurrentRoom" node_paths=PackedStringArray("cam")]
+script = ExtResource("14_kdyjf")
+cam = NodePath("../../Colors/Scene/CameraFollow/KCamera")
+
+[node name="Color" type="TextureRect" parent="."]
+visible = false
+offset_left = -256.0
+offset_top = -256.0
+offset_right = 256.0
+offset_bottom = 256.0
+texture = SubResource("ViewportTexture_mgu8n")
+
+[node name="Light" type="TextureRect" parent="."]
+offset_left = -256.0
+offset_top = -256.0
+offset_right = 256.0
+offset_bottom = 256.0
+texture = SubResource("ViewportTexture_smdbc")
+
+[node name="Room" type="TextureRect" parent="."]
+visible = false
+offset_left = -256.0
+offset_top = -256.0
+offset_right = 256.0
+offset_bottom = 256.0
+texture = SubResource("ViewportTexture_okeh7")
+
+[node name="Combined" type="ColorRect" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_kdyjf")
+offset_left = -256.0
+offset_top = -256.0
+offset_right = 256.0
+offset_bottom = 256.0
+
+[editable path="Colors/Scene"]
+[editable path="Colors/Scene/Room11"]
+[editable path="Colors/Scene/Room12"]

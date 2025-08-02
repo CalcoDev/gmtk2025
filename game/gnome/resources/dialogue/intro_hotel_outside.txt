@@ -1,0 +1,62 @@
+title: intro_enter_hotel
+---
+<<jump intro_door_enter>>
+===
+
+title: intro_door_enter
+---
+narrator: Enter the hotel?
+-> Yes
+    narrator: Your wish is my command.
+    <<intro_scene_answer yes>>
+-> No
+    narrator: Damn, ok.
+    <<intro_scene_answer no>>
+===
+
+title: intro_bus
+---
+narrator: hello this is me the narrator, saying some stuff to you!!!
+<<jump debug_option>>
+===
+
+title: debug_option
+---
+<<question>>
+narrator: What do you think of this game?
+-> Good, I quite like it!
+    narrator: Ayyy, I'm glad you do!
+    -> Are you sure sure?
+        -> Yes?
+            -> Still sure?
+                -> 100% absolutely certain?
+                    narrator: Very well, then, I think you deserve this!
+                    <<jump win>>
+                -> No.
+                    <<jump lose>>
+            -> No.
+                <<jump lose>>
+        -> No.
+            <<jump lose>>
+    -> No.
+        <<jump lose>>
+-> Bad, horrible, utter garbage, how dare you show this to me?
+    narrator: Oh come on now...
+    narrator: No taksises backsies.
+    -> I don't like:
+        narrator: L
+        <<jump lose>>
+    -> I like.
+        narrator: Thre you go!
+        <<jump win>>
+===
+
+title: win
+---
+narrator: WOOO CONGRATS, YOU DID IT, YOU WON
+===
+
+title: lose
+---
+narrator: [ ] you, you piece of [ ], [ ] !!!
+===

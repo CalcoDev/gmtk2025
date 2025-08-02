@@ -1,4 +1,7 @@
+class_name Player
 extends CharacterBody2D
+
+@export var locked: bool = false
 
 @export_group("References")
 @export var _sprite: AnimatedSprite2D
@@ -21,14 +24,28 @@ var _dash_dir: Vector2 = Vector2.ZERO
 
 var _prev_inp := Vector2.ZERO
 
+@export var frick_you_room: Area2D
+
 @export_group("Interactions")
 @export var _interactor: InteractorComponent
 @export var interactor_offset: float = 5.0
+
+const GROUP := &"player_group"
+
+static func get_instance(node: Node) -> Player:
+    return node.get_tree().get_first_node_in_group(GROUP)
+
+func _notification(what: int) -> void:
+    if what == NOTIFICATION_ENTER_TREE:
+        add_to_group(GROUP)
 
 func _ready() -> void:
     pass
 
 func _process(delta: float) -> void:
+    frick_you_room.global_position = self.global_position
+
+    _interactor.target_position = InputManager.data.last_nonzero_move_vec * interactor_offset
     if InputManager.data.interact.pressed:
         _interactor.try_interact()
 
@@ -40,7 +57,6 @@ func _process(delta: float) -> void:
             _end_dash()
     
     if is_dashing:
-        # _anim.play("dash")
         _sprite.play("dash")
     else:
         var inp := InputManager.data.move_vec
@@ -56,12 +72,23 @@ func _process(delta: float) -> void:
                 _sprite.flip_h = true
         else:
             _anim.play(&"idle")
+            # _sprite.play(&"run_front")
             _sprite.stop()
             _sprite.frame = 0
+
+func get_light_child() -> PointLight2D:
+    var lights = find_children("*", "PointLight2D", true)
+    for light: PointLight2D in lights:
+        if light.range_item_cull_mask ==2 :
+            return light
+    return null
 
 var _pullback_prev_vel := Vector2.ZERO
 var _pulled_player_back := false
 func _physics_process(delta: float) -> void:
+    if locked:
+        return
+
     var inp := InputManager.data.move_vec
     var body := self
 

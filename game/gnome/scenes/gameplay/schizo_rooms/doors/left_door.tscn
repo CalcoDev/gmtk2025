@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://bmrjiprxxgei6"]
+
+[ext_resource type="Texture2D" uid="uid://dg0jhiyboakue" path="res://gnome/assets/images/schizo_rooms/left_door.png" id="1_mmgkh"]
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_0dmi3"]
+polygon = PackedVector2Array(2, -3, 2, 7, -2, 7, -2, -3)
+
+[node name="LeftDoor" type="Node2D"]
+visibility_layer = 9
+z_index = 1
+
+[node name="Sprite" type="Sprite2D" parent="."]
+visibility_layer = 9
+texture = ExtResource("1_mmgkh")
+
+[node name="LightOccluder2D3" type="LightOccluder2D" parent="Sprite"]
+visibility_layer = 9
+position = Vector2(-14, 29)
+occluder = SubResource("OccluderPolygon2D_0dmi3")
+occluder_light_mask = 2
+
+[node name="LightOccluder2D4" type="LightOccluder2D" parent="Sprite"]
+visibility_layer = 9
+position = Vector2(-14, -29)
+occluder = SubResource("OccluderPolygon2D_0dmi3")
+occluder_light_mask = 2

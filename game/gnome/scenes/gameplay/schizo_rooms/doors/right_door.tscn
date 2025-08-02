@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://24hywtchrkbq"]
+
+[ext_resource type="Texture2D" uid="uid://bxtrlj1n8ijo5" path="res://gnome/assets/images/schizo_rooms/right_door.png" id="1_y67v5"]
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_0dmi3"]
+polygon = PackedVector2Array(2, -4, 2, 6, -2, 6, -2, -4)
+
+[node name="RightDoor" type="Node2D"]
+visibility_layer = 9
+z_index = 1
+
+[node name="Sprite" type="Sprite2D" parent="."]
+visibility_layer = 9
+texture = ExtResource("1_y67v5")
+
+[node name="LightOccluder2D3" type="LightOccluder2D" parent="Sprite"]
+visibility_layer = 9
+position = Vector2(14, 30)
+occluder = SubResource("OccluderPolygon2D_0dmi3")
+occluder_light_mask = 2
+
+[node name="LightOccluder2D4" type="LightOccluder2D" parent="Sprite"]
+visibility_layer = 9
+position = Vector2(14, -28)
+occluder = SubResource("OccluderPolygon2D_0dmi3")
+occluder_light_mask = 2

@@ -21,6 +21,7 @@ func spawn_spark(position: Vector2 = Vector2.ZERO, size: Vector2 = Vector2.ONE, 
         p.owner = get_tree().edited_scene_root
     p.polygon = PackedVector2Array([Vector2(3, 0), Vector2(0, 0.5), Vector2(-3, 0), Vector2(0, -0.5)])
     p.global_position = position
+    p.visibility_layer = 9
     _sparks[spark] = p
 
 var _delete_queue := []

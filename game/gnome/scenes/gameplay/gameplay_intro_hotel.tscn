@@ -1,0 +1,254 @@
+[gd_scene load_steps=20 format=4 uid="uid://canxf0n7gw8vu"]
+
+[ext_resource type="Script" uid="uid://bk3w1ucjqxflc" path="res://gnome/scenes/gameplay/gameplay_intro_hotel.gd" id="1_pkiir"]
+[ext_resource type="Texture2D" uid="uid://dp0a438jgd5h1" path="res://gnome/assets/images/intro/hote_entrance_floor_2.png" id="1_r81xo"]
+[ext_resource type="TileSet" uid="uid://cosl0onm74clr" path="res://gnome/resources/tilesets/shadow_tileset.tres" id="2_0e1ra"]
+[ext_resource type="Script" uid="uid://tuug22s8scwo" path="res://gnome/scripts/dialogue_loader.gd" id="2_kwxn5"]
+[ext_resource type="PackedScene" uid="uid://btikjdp737dfd" path="res://gnome/scenes/entities/player/player.tscn" id="3_pkiir"]
+[ext_resource type="Script" uid="uid://cqof6kdlctftf" path="res://common/scripts/kcamera.gd" id="4_kwxn5"]
+[ext_resource type="Script" uid="uid://dtbfefgg2abbx" path="res://gnome/scripts/sparks/sparks_renderer.gd" id="5_b5wbx"]
+[ext_resource type="Texture2D" uid="uid://drkgwlafpyynq" path="res://gnome/assets/images/eth_lights/light_ray.png" id="6_n54kd"]
+[ext_resource type="Texture2D" uid="uid://c0n2sxjpob2wg" path="res://gnome/assets/images/eth_lights/stroke_point.png" id="7_fljce"]
+[ext_resource type="Texture2D" uid="uid://c2dp7bd0htdhq" path="res://gnome/assets/images/eth_lights/window_light.png" id="8_ecxhv"]
+[ext_resource type="Script" uid="uid://c0lrwxgaa11k1" path="res://gnome/scripts/components/interactions/dialogue_interaction.gd" id="9_0e1ra"]
+[ext_resource type="Script" uid="uid://bmrmk8w20bqvg" path="res://gnome/scenes/gameplay/intro_door.gd" id="12_b5wbx"]
+
+[sub_resource type="Environment" id="Environment_hqman"]
+background_mode = 3
+glow_levels/1 = 10.25
+glow_levels/2 = 8.05
+glow_levels/4 = 2.6
+glow_levels/5 = 8.25
+glow_intensity = 0.15
+glow_strength = 1.03
+glow_bloom = 0.11
+glow_blend_mode = 0
+fog_mode = 1
+fog_density = 1.0
+
+[sub_resource type="Gradient" id="Gradient_8bm2q"]
+offsets = PackedFloat32Array(0, 0.780939)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_b5wbx"]
+gradient = SubResource("Gradient_8bm2q")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_n54kd"]
+offsets = PackedFloat32Array(0, 0.780939)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_dnylt"]
+gradient = SubResource("Gradient_n54kd")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_pkiir"]
+radius = 14.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_n54kd"]
+radius = 16.0
+height = 32.0
+
+[node name="GameplayIntroHotel" type="Node2D"]
+script = ExtResource("1_pkiir")
+
+[node name="DialogueLoader" type="Node" parent="."]
+script = ExtResource("2_kwxn5")
+files = Array[String](["res://gnome/resources/dialogue/intro_hotel_outside.txt"])
+
+[node name="SparksRenderer" type="Node2D" parent="."]
+script = ExtResource("5_b5wbx")
+metadata/_custom_type_script = "uid://dtbfefgg2abbx"
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.163036, 0.113397, 0.435368, 1)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_hqman")
+
+[node name="Intro" type="Sprite2D" parent="."]
+position = Vector2(-31, -34)
+texture = ExtResource("1_r81xo")
+centered = false
+
+[node name="Hotel" type="StaticBody2D" parent="Intro"]
+position = Vector2(32, 32)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Intro/Hotel"]
+polygon = PackedVector2Array(93, 108, 96, 97, 97, 69, 125, 69, 125, 97, 131, 102, 131, 127, 145, 127, 150, 101, 163, 78, 166, -26, 60, -27, 62, 80, 75, 101)
+
+[node name="Fence" type="StaticBody2D" parent="Intro"]
+position = Vector2(32, 32)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Intro/Fence"]
+polygon = PackedVector2Array(93, 129, 95, 103, 84, 99, 83, 109, 73, 107, 65, 93, 54, 88, 51, 74, 50, 42, 49, 0, 38, 1, 40, 94, 52, 99, 57, 102, 56, 115, 64, 121, 65, 107, 70, 118, 82, 119, 81, 126)
+
+[node name="Busses" type="StaticBody2D" parent="Intro"]
+position = Vector2(32, 32)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Intro/Busses"]
+polygon = PackedVector2Array(164, 60, 448, 63, 451, 99, 156, 97)
+
+[node name="Bounds" type="StaticBody2D" parent="Intro"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Intro/Bounds"]
+position = Vector2(4, 4)
+build_mode = 1
+polygon = PackedVector2Array(12, 34, 565, 34, 564, 310, 13, 309)
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray("AAD//wEAAAADAAEAAAD//wIAAAADAAEAAAD//wMAAAAAAAEAAAD//wQAAAAAAAEAAAD//wUAAAAAAAEAAAD//wYAAAAAAAEAAAD//wcAAAAAAAEAAAD//wgAAAAAAAIAAAAAAAgAAAABAAIAAAABAAgAAAABAAIAAAACAAgAAAABAAIAAAADAAgAAAABAAIAAAAEAAgAAAABAAIAAAAFAAgAAAABAAIAAAAGAAgAAAABAAIAAAAHAAgAAAABAAIAAAAIAAgAAAABAAIAAAAJAAgAAAABAAIAAAAKAAgAAAABAAIAAAALAAgAAAABAAIAAAAMAAgAAAABAAIAAAANAAgAAAABAAIAAAAOAAgAAAABAAIAAAAPAAgAAAABAAIAAAAQAAgAAAACAAIAAAARAAgAAAADAAEAAAASAAgAAAADAAEAAAATAAgAAAABAAIAAAAUAAgAAAABAAIAAAAVAAgAAAABAAIAAAAWAAgAAAABAAIAAAAQAAcAAAACAAEAAAAQAAYAAAACAAEAAAAQAAUAAAACAAEAAAAQAAQAAAACAAEAAAAQAAMAAAACAAEAAAAQAAIAAAACAAEAAAAQAAEAAAACAAEAAAAQAAAAAAACAAAAAAAPAAAAAAABAAAAAAAOAAAAAAABAAAAAAANAAAAAAABAAAAAAAMAAAAAAABAAAAAAALAAAAAAABAAAAAAAKAAAAAAABAAAAAAAJAAAAAAABAAAAAAAIAAAAAAABAAAAAAAHAAAAAAABAAAAAAAGAAAAAAABAAAAAAAFAAAAAAABAAAAAAABAAAAAAABAAAAAAAAAAAAAAABAAAAAAD//wAAAAADAAEAAAD/////AAADAAEAAAAAAP//AAADAAEAAAABAP//AAADAAEAAAAFAP//AAADAAEAAAAGAP//AAADAAEAAAAHAP//AAADAAEAAAAIAP//AAADAAEAAAAJAP//AAADAAEAAAAKAP//AAADAAEAAAALAP//AAADAAEAAAAMAP//AAADAAEAAAANAP//AAADAAEAAAAOAP//AAADAAEAAAAPAP//AAADAAEAAAAQAP//AAADAAEAAAARAP//AAADAAEAAAARAAAAAAADAAEAAAARAAEAAAADAAEAAAARAAIAAAADAAEAAAARAAMAAAADAAEAAAARAAQAAAADAAEAAAARAAUAAAADAAEAAAARAAYAAAADAAEAAAARAAcAAAADAAEAAAASAAcAAAADAAEAAAASAAYAAAADAAEAAAASAAUAAAADAAEAAAASAAQAAAADAAEAAAASAAMAAAADAAEAAAASAAIAAAADAAEAAAASAAEAAAADAAEAAAASAAAAAAADAAEAAAASAP//AAADAAEAAAASAAkAAAADAAEAAAARAAkAAAADAAEAAAAQAAkAAAADAAEAAAAPAAkAAAADAAEAAAAOAAkAAAADAAEAAAANAAkAAAADAAEAAAAMAAkAAAADAAEAAAALAAkAAAADAAEAAAAKAAkAAAADAAEAAAAJAAkAAAADAAEAAAAIAAkAAAADAAEAAAAHAAkAAAADAAEAAAAGAAkAAAADAAEAAAAFAAkAAAADAAEAAAAEAAkAAAADAAEAAAADAAkAAAADAAEAAAACAAkAAAADAAEAAAABAAkAAAADAAEAAAAAAAkAAAADAAEAAAD//wkAAAADAAEAAAD+/wkAAAADAAEAAAD+/wgAAAADAAEAAAD+/wcAAAADAAEAAAD+/wYAAAADAAEAAAD+/wUAAAADAAEAAAD+/wQAAAADAAEAAAD+/wMAAAADAAEAAAD+/wIAAAADAAEAAAD///7/AAADAAEAAAD+////AAADAAEAAAD+/wAAAAADAAEAAAD+/wEAAAADAAEAAAAAAP7/AAADAAEAAAABAP7/AAADAAEAAAACAP7/AAADAAEAAAADAP7/AAADAAEAAAAEAP7/AAADAAEAAAAFAP7/AAADAAEAAAAGAP7/AAADAAEAAAAHAP7/AAADAAEAAAAIAP7/AAADAAEAAAD+//7/AAADAAEAAAAJAP7/AAADAAEAAAAKAP7/AAADAAEAAAARAP7/AAADAAEAAAASAP7/AAADAAEAAAAQAP7/AAADAAEAAAAPAP7/AAADAAEAAAAOAP7/AAADAAEAAAANAP7/AAADAAEAAAAMAP7/AAADAAEAAAALAP7/AAADAAEAAAA=")
+tile_set = ExtResource("2_0e1ra")
+
+[node name="Player" parent="." instance=ExtResource("3_pkiir")]
+position = Vector2(283, 168)
+
+[node name="KCamera" type="Camera2D" parent="Player"]
+zoom = Vector2(0.5, 0.5)
+limit_left = -16
+limit_top = -16
+limit_right = 528
+limit_bottom = 272
+script = ExtResource("4_kwxn5")
+metadata/_custom_type_script = "uid://cqof6kdlctftf"
+
+[node name="PointLight2D" type="PointLight2D" parent="Player"]
+texture = SubResource("GradientTexture2D_b5wbx")
+texture_scale = 0.8
+height = 10.0
+
+[node name="Lights" type="Node2D" parent="."]
+
+[node name="PointLight2D9" type="PointLight2D" parent="Lights"]
+position = Vector2(155, 55)
+color = Color(1, 0.972, 0.58, 1)
+energy = 0.52
+texture = SubResource("GradientTexture2D_dnylt")
+height = 10.0
+
+[node name="PointLight2D10" type="PointLight2D" parent="Lights"]
+position = Vector2(72, 57)
+color = Color(1, 0.972, 0.58, 1)
+energy = 0.52
+texture = SubResource("GradientTexture2D_dnylt")
+height = 10.0
+
+[node name="PointLight2D11" type="PointLight2D" parent="Lights"]
+position = Vector2(112, 165)
+color = Color(1, 0.972, 0.58, 1)
+texture = SubResource("GradientTexture2D_dnylt")
+height = 10.0
+
+[node name="PointLight2D" type="PointLight2D" parent="Lights"]
+position = Vector2(469, 57)
+color = Color(1, 0.972549, 0.580392, 1)
+texture = ExtResource("6_n54kd")
+
+[node name="PointLight2D3" type="PointLight2D" parent="Lights"]
+position = Vector2(451, 152)
+color = Color(1, 0.972549, 0.580392, 1)
+texture = ExtResource("6_n54kd")
+
+[node name="PointLight2D2" type="PointLight2D" parent="Lights"]
+position = Vector2(533, 118)
+color = Color(1, 0.972549, 0.580392, 1)
+texture = ExtResource("6_n54kd")
+
+[node name="PointLight2D4" type="PointLight2D" parent="Lights"]
+position = Vector2(115, 75)
+color = Color(1, 0.972549, 0.580392, 1)
+energy = 0.0
+texture = ExtResource("7_fljce")
+texture_scale = 2.0
+
+[node name="PointLight2D5" type="PointLight2D" parent="Lights"]
+position = Vector2(270, 74)
+rotation = -0.378166
+color = Color(1, 0.972549, 0.580392, 1)
+energy = 0.5
+texture = ExtResource("8_ecxhv")
+
+[node name="PointLight2D8" type="PointLight2D" parent="Lights"]
+position = Vector2(110, 215)
+rotation = 1.0472
+color = Color(1, 0.972549, 0.580392, 1)
+energy = 0.5
+texture = ExtResource("8_ecxhv")
+
+[node name="PointLight2D6" type="PointLight2D" parent="Lights"]
+position = Vector2(253, 133)
+rotation = 0.127638
+color = Color(1, 0.972549, 0.580392, 1)
+energy = 0.5
+texture = ExtResource("8_ecxhv")
+
+[node name="PointLight2D7" type="PointLight2D" parent="Lights"]
+position = Vector2(221, 163)
+rotation = 0.447025
+color = Color(1, 0.972549, 0.580392, 1)
+energy = 0.5
+texture = ExtResource("8_ecxhv")
+
+[node name="PointLight2D12" type="PointLight2D" parent="Lights"]
+position = Vector2(24.0195, 165.619)
+rotation = 1.43252
+color = Color(1, 0.732479, 0.890348, 1)
+energy = 0.5
+texture = ExtResource("8_ecxhv")
+
+[node name="PointLight2D13" type="PointLight2D" parent="Lights"]
+position = Vector2(-16.4253, 131.623)
+rotation = 1.91298
+color = Color(1, 0.732479, 0.890348, 1)
+energy = 0.5
+texture = ExtResource("8_ecxhv")
+
+[node name="PointLight2D14" type="PointLight2D" parent="Lights"]
+position = Vector2(-42.6436, 84.5513)
+rotation = 2.37238
+color = Color(1, 0.732479, 0.890348, 1)
+energy = 0.5
+texture = ExtResource("8_ecxhv")
+
+[node name="Interactions" type="Node2D" parent="."]
+
+[node name="DialogueInteraction" type="Area2D" parent="Interactions"]
+position = Vector2(177, 77)
+collision_layer = 256
+collision_mask = 0
+script = ExtResource("9_0e1ra")
+dialogue_id = "intro_bus"
+metadata/_custom_type_script = "uid://c0lrwxgaa11k1"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactions/DialogueInteraction"]
+shape = SubResource("CircleShape2D_pkiir")
+
+[node name="IntroDoorInteraction" type="Area2D" parent="Interactions"]
+position = Vector2(113, 81)
+collision_layer = 256
+collision_mask = 0
+script = ExtResource("9_0e1ra")
+dialogue_id = "intro_door_enter"
+metadata/_custom_type_script = "uid://c0lrwxgaa11k1"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactions/IntroDoorInteraction"]
+shape = SubResource("CircleShape2D_pkiir")
+
+[node name="IntroDoorAreaEnter" type="Area2D" parent="Interactions"]
+position = Vector2(113, 81)
+collision_layer = 0
+collision_mask = 4
+script = ExtResource("12_b5wbx")
+body_layers = 4
+metadata/_custom_type_script = "uid://bxurkb14a5h7e"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactions/IntroDoorAreaEnter"]
+shape = SubResource("CapsuleShape2D_n54kd")
