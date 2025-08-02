@@ -14,7 +14,10 @@
 font_names = PackedStringArray("04b11")
 
 [sub_resource type="SystemFont" id="SystemFont_l5885"]
-font_names = PackedStringArray("04b03", "DoubleHomicide")
+font_names = PackedStringArray("04b03")
+hinting = 0
+subpixel_positioning = 0
+keep_rounding_remainders = false
 
 [sub_resource type="Gradient" id="Gradient_8bm2q"]
 offsets = PackedFloat32Array(0, 0.780939)
@@ -45,74 +48,90 @@ fog_density = 1.0
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
-light_mask = 0
-offset_left = 9.0
-offset_top = 167.0
-offset_right = 103.0
-offset_bottom = 245.0
-texture = ExtResource("1_4xp1x")
-
-[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/TextureRect"]
-layout_mode = 0
-offset_left = 78.0
-offset_top = 15.0
-offset_right = 206.0
-offset_bottom = 55.0
+[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer"]
+offset_left = 81.0
+offset_top = 186.0
+offset_right = 209.0
+offset_bottom = 226.0
 theme_override_fonts/normal_font = SubResource("SystemFont_4xp1x")
 theme_override_font_sizes/normal_font_size = 8
 text = "GMONE"
 
-[node name="RichTextLabel2" type="RichTextLabel" parent="CanvasLayer/TextureRect"]
-layout_mode = 0
-offset_left = 78.0
-offset_top = 23.0
-offset_right = 238.0
-offset_bottom = 73.0
+[node name="RichTextLabel2" type="RichTextLabel" parent="CanvasLayer"]
+offset_left = 81.0
+offset_top = 198.0
+offset_right = 241.0
+offset_bottom = 248.0
 theme_override_fonts/normal_font = SubResource("SystemFont_l5885")
 theme_override_font_sizes/normal_font_size = 8
 text = "Hi guys this is gmone speaking lol
 I am a misspelled gnome"
 scroll_active = false
 
-[node name="Intro" type="Sprite2D" parent="."]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
+light_mask = 0
+offset_left = 4.0
+offset_top = 172.0
+offset_right = 98.0
+offset_bottom = 252.0
+texture = ExtResource("1_4xp1x")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+offset_left = 1.0
+offset_top = -7.0
+offset_right = 256.0
+offset_bottom = 256.0
+stretch = true
+stretch_shrink = 2
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+disable_3d = true
+transparent_bg = true
+handle_input_locally = false
+snap_2d_transforms_to_pixel = true
+snap_2d_vertices_to_pixel = true
+canvas_item_default_texture_filter = 0
+size = Vector2i(127, 131)
+
+[node name="Intro" type="Sprite2D" parent="SubViewportContainer/SubViewport"]
 position = Vector2(-31, -34)
 texture = ExtResource("3_opl4i")
 centered = false
 
-[node name="Hotel" type="StaticBody2D" parent="Intro"]
+[node name="Hotel" type="StaticBody2D" parent="SubViewportContainer/SubViewport/Intro"]
 position = Vector2(32, 32)
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Intro/Hotel"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="SubViewportContainer/SubViewport/Intro/Hotel"]
 polygon = PackedVector2Array(93, 108, 96, 97, 125, 97, 131, 102, 131, 127, 145, 127, 150, 101, 163, 78, 166, -26, 60, -27, 62, 80, 75, 101)
 
-[node name="Fence" type="StaticBody2D" parent="Intro"]
+[node name="Fence" type="StaticBody2D" parent="SubViewportContainer/SubViewport/Intro"]
 position = Vector2(32, 32)
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Intro/Fence"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="SubViewportContainer/SubViewport/Intro/Fence"]
 polygon = PackedVector2Array(93, 129, 95, 103, 84, 99, 83, 109, 73, 107, 65, 93, 54, 88, 51, 74, 50, 42, 49, 0, 38, 1, 40, 94, 52, 99, 57, 102, 56, 115, 64, 121, 65, 107, 70, 118, 82, 119, 81, 126)
 
-[node name="Busses" type="StaticBody2D" parent="Intro"]
+[node name="Busses" type="StaticBody2D" parent="SubViewportContainer/SubViewport/Intro"]
 position = Vector2(32, 32)
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Intro/Busses"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="SubViewportContainer/SubViewport/Intro/Busses"]
 polygon = PackedVector2Array(164, 60, 448, 63, 451, 99, 156, 97)
 
-[node name="Bounds" type="StaticBody2D" parent="Intro"]
+[node name="Bounds" type="StaticBody2D" parent="SubViewportContainer/SubViewport/Intro"]
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Intro/Bounds"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="SubViewportContainer/SubViewport/Intro/Bounds"]
 position = Vector2(4, 4)
 build_mode = 1
 polygon = PackedVector2Array(12, 34, 565, 34, 564, 310, 13, 309)
 
-[node name="TileMapLayer" type="TileMapLayer" parent="."]
+[node name="TileMapLayer" type="TileMapLayer" parent="SubViewportContainer/SubViewport"]
 tile_map_data = PackedByteArray("AAD//wEAAAADAAEAAAD//wIAAAADAAEAAAD//wMAAAAAAAEAAAD//wQAAAAAAAEAAAD//wUAAAAAAAEAAAD//wYAAAAAAAEAAAD//wcAAAAAAAEAAAD//wgAAAAAAAIAAAAAAAgAAAABAAIAAAABAAgAAAABAAIAAAACAAgAAAABAAIAAAADAAgAAAABAAIAAAAEAAgAAAABAAIAAAAFAAgAAAABAAIAAAAGAAgAAAABAAIAAAAHAAgAAAABAAIAAAAIAAgAAAABAAIAAAAJAAgAAAABAAIAAAAKAAgAAAABAAIAAAALAAgAAAABAAIAAAAMAAgAAAABAAIAAAANAAgAAAABAAIAAAAOAAgAAAABAAIAAAAPAAgAAAABAAIAAAAQAAgAAAACAAIAAAARAAgAAAADAAEAAAASAAgAAAADAAEAAAATAAgAAAABAAIAAAAUAAgAAAABAAIAAAAVAAgAAAABAAIAAAAWAAgAAAABAAIAAAAQAAcAAAACAAEAAAAQAAYAAAACAAEAAAAQAAUAAAACAAEAAAAQAAQAAAACAAEAAAAQAAMAAAACAAEAAAAQAAIAAAACAAEAAAAQAAEAAAACAAEAAAAQAAAAAAACAAAAAAAPAAAAAAABAAAAAAAOAAAAAAABAAAAAAANAAAAAAABAAAAAAAMAAAAAAABAAAAAAALAAAAAAABAAAAAAAKAAAAAAABAAAAAAAJAAAAAAABAAAAAAAIAAAAAAABAAAAAAAHAAAAAAABAAAAAAAGAAAAAAABAAAAAAAFAAAAAAABAAAAAAABAAAAAAABAAAAAAAAAAAAAAABAAAAAAD//wAAAAADAAEAAAD/////AAADAAEAAAAAAP//AAADAAEAAAABAP//AAADAAEAAAAFAP//AAADAAEAAAAGAP//AAADAAEAAAAHAP//AAADAAEAAAAIAP//AAADAAEAAAAJAP//AAADAAEAAAAKAP//AAADAAEAAAALAP//AAADAAEAAAAMAP//AAADAAEAAAANAP//AAADAAEAAAAOAP//AAADAAEAAAAPAP//AAADAAEAAAAQAP//AAADAAEAAAARAP//AAADAAEAAAARAAAAAAADAAEAAAARAAEAAAADAAEAAAARAAIAAAADAAEAAAARAAMAAAADAAEAAAARAAQAAAADAAEAAAARAAUAAAADAAEAAAARAAYAAAADAAEAAAARAAcAAAADAAEAAAASAAcAAAADAAEAAAASAAYAAAADAAEAAAASAAUAAAADAAEAAAASAAQAAAADAAEAAAASAAMAAAADAAEAAAASAAIAAAADAAEAAAASAAEAAAADAAEAAAASAAAAAAADAAEAAAASAP//AAADAAEAAAASAAkAAAADAAEAAAARAAkAAAADAAEAAAAQAAkAAAADAAEAAAAPAAkAAAADAAEAAAAOAAkAAAADAAEAAAANAAkAAAADAAEAAAAMAAkAAAADAAEAAAALAAkAAAADAAEAAAAKAAkAAAADAAEAAAAJAAkAAAADAAEAAAAIAAkAAAADAAEAAAAHAAkAAAADAAEAAAAGAAkAAAADAAEAAAAFAAkAAAADAAEAAAAEAAkAAAADAAEAAAADAAkAAAADAAEAAAACAAkAAAADAAEAAAABAAkAAAADAAEAAAAAAAkAAAADAAEAAAD//wkAAAADAAEAAAD+/wkAAAADAAEAAAD+/wgAAAADAAEAAAD+/wcAAAADAAEAAAD+/wYAAAADAAEAAAD+/wUAAAADAAEAAAD+/wQAAAADAAEAAAD+/wMAAAADAAEAAAD+/wIAAAADAAEAAAD///7/AAADAAEAAAD+////AAADAAEAAAD+/wAAAAADAAEAAAD+/wEAAAADAAEAAAAAAP7/AAADAAEAAAABAP7/AAADAAEAAAACAP7/AAADAAEAAAADAP7/AAADAAEAAAAEAP7/AAADAAEAAAAFAP7/AAADAAEAAAAGAP7/AAADAAEAAAAHAP7/AAADAAEAAAAIAP7/AAADAAEAAAD+//7/AAADAAEAAAAJAP7/AAADAAEAAAAKAP7/AAADAAEAAAARAP7/AAADAAEAAAASAP7/AAADAAEAAAAQAP7/AAADAAEAAAAPAP7/AAADAAEAAAAOAP7/AAADAAEAAAANAP7/AAADAAEAAAAMAP7/AAADAAEAAAALAP7/AAADAAEAAAA=")
 tile_set = ExtResource("2_8bm2q")
 
-[node name="Player" parent="." instance=ExtResource("4_l5885")]
+[node name="Player" parent="SubViewportContainer/SubViewport" instance=ExtResource("4_l5885")]
 position = Vector2(283, 168)
 
-[node name="KCamera" type="Camera2D" parent="Player"]
+[node name="KCamera" type="Camera2D" parent="SubViewportContainer/SubViewport/Player"]
+zoom = Vector2(0.5, 0.5)
 limit_left = -16
 limit_top = -16
 limit_right = 528
@@ -120,107 +139,107 @@ limit_bottom = 272
 script = ExtResource("1_8odw5")
 metadata/_custom_type_script = "uid://cqof6kdlctftf"
 
-[node name="SparksRenderer" type="Node2D" parent="."]
+[node name="SparksRenderer" type="Node2D" parent="SubViewportContainer/SubViewport"]
 script = ExtResource("1_vlkyo")
 metadata/_custom_type_script = "uid://dtbfefgg2abbx"
 
-[node name="CanvasModulate" type="CanvasModulate" parent="."]
+[node name="CanvasModulate" type="CanvasModulate" parent="SubViewportContainer/SubViewport"]
 color = Color(0.163036, 0.113397, 0.435368, 1)
 
-[node name="Lights" type="Node2D" parent="."]
+[node name="Lights" type="Node2D" parent="SubViewportContainer/SubViewport"]
 
-[node name="PointLight2D9" type="PointLight2D" parent="Lights"]
+[node name="PointLight2D9" type="PointLight2D" parent="SubViewportContainer/SubViewport/Lights"]
 position = Vector2(155, 55)
 color = Color(1, 0.972, 0.58, 1)
 energy = 0.52
 texture = SubResource("GradientTexture2D_x04xn")
 height = 10.0
 
-[node name="PointLight2D10" type="PointLight2D" parent="Lights"]
+[node name="PointLight2D10" type="PointLight2D" parent="SubViewportContainer/SubViewport/Lights"]
 position = Vector2(72, 57)
 color = Color(1, 0.972, 0.58, 1)
 energy = 0.52
 texture = SubResource("GradientTexture2D_x04xn")
 height = 10.0
 
-[node name="PointLight2D11" type="PointLight2D" parent="Lights"]
+[node name="PointLight2D11" type="PointLight2D" parent="SubViewportContainer/SubViewport/Lights"]
 position = Vector2(112, 165)
 color = Color(1, 0.972, 0.58, 1)
 texture = SubResource("GradientTexture2D_x04xn")
 height = 10.0
 
-[node name="PointLight2D" type="PointLight2D" parent="Lights"]
+[node name="PointLight2D" type="PointLight2D" parent="SubViewportContainer/SubViewport/Lights"]
 position = Vector2(469, 57)
 color = Color(1, 0.972549, 0.580392, 1)
 texture = ExtResource("8_x04xn")
 
-[node name="PointLight2D3" type="PointLight2D" parent="Lights"]
+[node name="PointLight2D3" type="PointLight2D" parent="SubViewportContainer/SubViewport/Lights"]
 position = Vector2(451, 152)
 color = Color(1, 0.972549, 0.580392, 1)
 texture = ExtResource("8_x04xn")
 
-[node name="PointLight2D2" type="PointLight2D" parent="Lights"]
+[node name="PointLight2D2" type="PointLight2D" parent="SubViewportContainer/SubViewport/Lights"]
 position = Vector2(533, 118)
 color = Color(1, 0.972549, 0.580392, 1)
 texture = ExtResource("8_x04xn")
 
-[node name="PointLight2D4" type="PointLight2D" parent="Lights"]
+[node name="PointLight2D4" type="PointLight2D" parent="SubViewportContainer/SubViewport/Lights"]
 position = Vector2(115, 75)
 color = Color(1, 0.972549, 0.580392, 1)
 energy = 0.0
 texture = ExtResource("9_4xp1x")
 texture_scale = 2.0
 
-[node name="PointLight2D5" type="PointLight2D" parent="Lights"]
+[node name="PointLight2D5" type="PointLight2D" parent="SubViewportContainer/SubViewport/Lights"]
 position = Vector2(270, 74)
 rotation = -0.378166
 color = Color(1, 0.972549, 0.580392, 1)
 energy = 0.5
 texture = ExtResource("10_l5885")
 
-[node name="PointLight2D8" type="PointLight2D" parent="Lights"]
+[node name="PointLight2D8" type="PointLight2D" parent="SubViewportContainer/SubViewport/Lights"]
 position = Vector2(110, 215)
 rotation = 1.0472
 color = Color(1, 0.972549, 0.580392, 1)
 energy = 0.5
 texture = ExtResource("10_l5885")
 
-[node name="PointLight2D6" type="PointLight2D" parent="Lights"]
+[node name="PointLight2D6" type="PointLight2D" parent="SubViewportContainer/SubViewport/Lights"]
 position = Vector2(253, 133)
 rotation = 0.127638
 color = Color(1, 0.972549, 0.580392, 1)
 energy = 0.5
 texture = ExtResource("10_l5885")
 
-[node name="PointLight2D7" type="PointLight2D" parent="Lights"]
+[node name="PointLight2D7" type="PointLight2D" parent="SubViewportContainer/SubViewport/Lights"]
 position = Vector2(221, 163)
 rotation = 0.447025
 color = Color(1, 0.972549, 0.580392, 1)
 energy = 0.5
 texture = ExtResource("10_l5885")
 
-[node name="PointLight2D12" type="PointLight2D" parent="Lights"]
+[node name="PointLight2D12" type="PointLight2D" parent="SubViewportContainer/SubViewport/Lights"]
 position = Vector2(24.0195, 165.619)
 rotation = 1.43252
 color = Color(1, 0.732479, 0.890348, 1)
 energy = 0.5
 texture = ExtResource("10_l5885")
 
-[node name="PointLight2D13" type="PointLight2D" parent="Lights"]
+[node name="PointLight2D13" type="PointLight2D" parent="SubViewportContainer/SubViewport/Lights"]
 position = Vector2(-16.4253, 131.623)
 rotation = 1.91298
 color = Color(1, 0.732479, 0.890348, 1)
 energy = 0.5
 texture = ExtResource("10_l5885")
 
-[node name="PointLight2D14" type="PointLight2D" parent="Lights"]
+[node name="PointLight2D14" type="PointLight2D" parent="SubViewportContainer/SubViewport/Lights"]
 position = Vector2(-42.6436, 84.5513)
 rotation = 2.37238
 color = Color(1, 0.732479, 0.890348, 1)
 energy = 0.5
 texture = ExtResource("10_l5885")
 
-[node name="Interactions" type="Node2D" parent="."]
+[node name="Interactions" type="Node2D" parent="SubViewportContainer/SubViewport"]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport"]
 environment = SubResource("Environment_l5885")
