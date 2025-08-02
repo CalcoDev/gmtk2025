@@ -21,10 +21,17 @@ var _dash_dir: Vector2 = Vector2.ZERO
 
 var _prev_inp := Vector2.ZERO
 
+@export_group("Interactions")
+@export var _interactor: InteractorComponent
+@export var interactor_offset: float = 5.0
+
 func _ready() -> void:
     pass
 
 func _process(delta: float) -> void:
+    if InputManager.data.interact.pressed:
+        _interactor.try_interact()
+
     if not is_dashing and _dash_timer < 0.0 and InputManager.data.dash.pressed:
         _start_dash()
     _dash_timer -= delta

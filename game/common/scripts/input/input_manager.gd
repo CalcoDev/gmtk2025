@@ -10,6 +10,8 @@ class Data:
 	var dash := IKey.new()
 	var rope_attach := IKey.new()
 
+	var interact := IKey.new()
+
 func _update(delta: float) -> void:
 	self.data.move_vec = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	if self.data.move_vec.length_squared() > 0.01:
@@ -17,6 +19,7 @@ func _update(delta: float) -> void:
 	self.data.mouse_pos = get_global_mouse_position()
 	self.data.dash.update_from_input("dash", delta)
 	self.data.rope_attach.update_from_input("rope_attach", delta)
+	self.data.interact.update_from_input("interact", delta)
 
 # internal stuff after this
 var data := Data.new()
