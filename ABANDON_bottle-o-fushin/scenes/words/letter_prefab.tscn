@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=3 uid="uid://bcpcnrordsxtr"]
+
+[ext_resource type="FontFile" uid="uid://di1hv0njpuqfg" path="res://resources/fonts/spectral/Spectral-Medium.ttf" id="1_m084e"]
+
+[node name="LetterPrefab" type="RichTextLabel"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/normal_font = ExtResource("1_m084e")
+theme_override_font_sizes/normal_font_size = 64
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1

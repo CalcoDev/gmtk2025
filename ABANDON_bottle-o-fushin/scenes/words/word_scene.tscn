@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://d4fjhw7hubrle"]
+
+[ext_resource type="Script" uid="uid://cy70q8bby2v1x" path="res://scripts/word_control.gd" id="1_aftco"]
+[ext_resource type="FontFile" uid="uid://di1hv0njpuqfg" path="res://resources/fonts/spectral/Spectral-Medium.ttf" id="2_03bvx"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_aftco")
+
+[node name="LetterPrefab" type="RichTextLabel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/normal_font = ExtResource("2_03bvx")
+theme_override_font_sizes/normal_font_size = 64
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1

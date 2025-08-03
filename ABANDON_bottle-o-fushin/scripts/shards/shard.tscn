@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://5klnak31y0wi"]
+
+[node name="Shard" type="RigidBody2D"]
+collision_layer = 0
+collision_mask = 0
+sleeping = true
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+disabled = true

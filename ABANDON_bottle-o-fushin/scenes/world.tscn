@@ -1,0 +1,442 @@
+[gd_scene load_steps=10 format=3 uid="uid://u5s2bcjejxcf"]
+
+[ext_resource type="Texture2D" uid="uid://cg0acopx3b0pb" path="res://assets/intro/intro_final_screen_lowres.png" id="1_k0juu"]
+[ext_resource type="FontFile" uid="uid://di1hv0njpuqfg" path="res://resources/fonts/spectral/Spectral-Medium.ttf" id="1_nnsk1"]
+[ext_resource type="PackedScene" uid="uid://cl2hct3jxte3v" path="res://scripts/shards/shard_emitter.tscn" id="2_k0juu"]
+[ext_resource type="Texture2D" uid="uid://cah118fijyuol" path="res://assets/icon_bottle.png" id="2_rwgxs"]
+[ext_resource type="Script" uid="uid://6w4affnlb6au" path="res://scripts/kcamera.gd" id="5_71j4m"]
+
+[sub_resource type="Animation" id="Animation_4wyf3"]
+resource_name = "intro"
+length = 10.0
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AllStuff/Stuck:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.75, 4.8, 6.25),
+"transitions": PackedFloat32Array(2.21914, 1, 1, 1),
+"update": 0,
+"values": [Color(0.921569, 0.858824, 0.698039, 0), Color(0.921569, 0.858824, 0.698039, 1), Color(0.921569, 0.858824, 0.698039, 1), Color(0.980392, 0.741176, 0.184314, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AllStuff/In:modulate")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.75, 1.6, 3.5, 4.1),
+"transitions": PackedFloat32Array(1, 2.07053, 1, 1, 2.07053),
+"update": 0,
+"values": [Color(0.921569, 0.858824, 0.698039, 0), Color(0.921569, 0.858824, 0.698039, 0), Color(0.921569, 0.858824, 0.698039, 1), Color(0.921569, 0.858824, 0.698039, 1), Color(0.921569, 0.858824, 0.698039, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AllStuff/The:modulate")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.95, 1.75, 3.65, 4.3),
+"transitions": PackedFloat32Array(1, 2.07053, 1, 1, 2.07053),
+"update": 0,
+"values": [Color(0.921569, 0.858824, 0.698039, 0), Color(0.921569, 0.858824, 0.698039, 0), Color(0.921569, 0.858824, 0.698039, 1), Color(0.921569, 0.858824, 0.698039, 1), Color(0.921569, 0.858824, 0.698039, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("AllStuff/Bottle:modulate")
+tracks/3/interp = 2
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1.05, 1.85, 3.9, 4.55),
+"transitions": PackedFloat32Array(1, 2.07053, 1, 1, 2.07053),
+"update": 0,
+"values": [Color(0.921569, 0.858824, 0.698039, 0), Color(0.921569, 0.858824, 0.698039, 0), Color(0.921569, 0.858824, 0.698039, 1), Color(0.921569, 0.858824, 0.698039, 1), Color(0.921569, 0.858824, 0.698039, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("AllStuff/Of:modulate")
+tracks/4/interp = 2
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 1.75, 2.65, 4.05, 4.8),
+"transitions": PackedFloat32Array(1, 2.07053, 1, 1, 2.07053),
+"update": 0,
+"values": [Color(0.921569, 0.858824, 0.698039, 0), Color(0.921569, 0.858824, 0.698039, 0), Color(0.921569, 0.858824, 0.698039, 1), Color(0.921569, 0.858824, 0.698039, 1), Color(0.921569, 0.858824, 0.698039, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("AllStuff/Fushin:modulate")
+tracks/5/interp = 2
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 1.95, 2.9, 5.25, 6.25),
+"transitions": PackedFloat32Array(1, 2.07053, 1, 1, 1),
+"update": 0,
+"values": [Color(0.921569, 0.858824, 0.698039, 0), Color(0.921569, 0.858824, 0.698039, 0), Color(0.921569, 0.858824, 0.698039, 1), Color(0.921569, 0.858824, 0.698039, 1), Color(0.980392, 0.741176, 0.184314, 1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("AllStuff/BottleSprite:modulate")
+tracks/6/interp = 2
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(2.85, 4.9),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("AllStuff:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 6.35),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/8/type = "method"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("KCamera")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(6.419, 6.43418, 6.45),
+"transitions": PackedFloat32Array(1, 1, 1),
+"values": [{
+"args": [Vector2(0, 200), 100.0, 2.0, 1],
+"method": &"shake_spring"
+}, {
+"args": [Vector2(400, 0), 200.0, 1.0, 1],
+"method": &"shake_spring"
+}, {
+"args": [100.0, 100.0, 1.0, true, 1],
+"method": &"shake_noise"
+}]
+}
+tracks/9/type = "method"
+tracks/9/imported = false
+tracks/9/enabled = false
+tracks/9/path = NodePath("AnimationPlayer")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(6.45),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"new_animation", -1, 1.0, false],
+"method": &"play"
+}]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Sprite2D:visible")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0, 6.35),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/11/type = "method"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Sprite2D/ShardEmitter")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(6.45),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"shatter"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_k0juu"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AllStuff/Of:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AllStuff/Fushin:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AllStuff/Bottle:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("AllStuff/The:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("AllStuff/In:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("AllStuff/Stuck:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("AllStuff/BottleSprite:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("AllStuff:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Sprite2D:visible")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_71j4m"]
+resource_name = "new_animation"
+step = 0.05
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D/ShardEmitter")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.05),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"shatter"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_71j4m"]
+_data = {
+&"RESET": SubResource("Animation_k0juu"),
+&"intro": SubResource("Animation_4wyf3"),
+&"new_animation": SubResource("Animation_71j4m")
+}
+
+[node name="World" type="Node2D"]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_71j4m")
+}
+autoplay = "intro"
+
+[node name="Background" type="ColorRect" parent="."]
+offset_left = -160.0
+offset_top = -136.0
+offset_right = 855.0
+offset_bottom = 509.0
+color = Color(0, 0, 0, 1)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = 1
+position = Vector2(0, -7)
+texture = ExtResource("1_k0juu")
+centered = false
+
+[node name="ShardEmitter" parent="Sprite2D" instance=ExtResource("2_k0juu")]
+nbr_of_shards = 8
+lifetime = 50.0
+
+[node name="AllStuff" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Stuck" type="RichTextLabel" parent="AllStuff"]
+offset_right = 640.0
+offset_bottom = 360.0
+theme_override_fonts/normal_font = ExtResource("1_nnsk1")
+theme_override_font_sizes/normal_font_size = 64
+text = "Stuck     
+
+
+"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="In" type="RichTextLabel" parent="AllStuff"]
+offset_right = 640.0
+offset_bottom = 360.0
+theme_override_fonts/normal_font = ExtResource("1_nnsk1")
+theme_override_font_sizes/normal_font_size = 64
+text = "           in
+
+
+"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="The" type="RichTextLabel" parent="AllStuff"]
+offset_right = 640.0
+offset_bottom = 360.0
+theme_override_fonts/normal_font = ExtResource("1_nnsk1")
+theme_override_font_sizes/normal_font_size = 64
+text = "the           "
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Bottle" type="RichTextLabel" parent="AllStuff"]
+offset_right = 640.0
+offset_bottom = 360.0
+theme_override_fonts/normal_font = ExtResource("1_nnsk1")
+theme_override_font_sizes/normal_font_size = 64
+text = "       bottle"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Of" type="RichTextLabel" parent="AllStuff"]
+offset_right = 640.0
+offset_bottom = 360.0
+theme_override_fonts/normal_font = ExtResource("1_nnsk1")
+theme_override_font_sizes/normal_font_size = 64
+text = "
+
+of            "
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Fushin" type="RichTextLabel" parent="AllStuff"]
+offset_right = 640.0
+offset_bottom = 360.0
+theme_override_fonts/normal_font = ExtResource("1_nnsk1")
+theme_override_font_sizes/normal_font_size = 64
+text = "
+
+     fushin"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BottleSprite" type="TextureRect" parent="AllStuff"]
+offset_right = 914.0
+offset_bottom = 512.0
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("2_rwgxs")
+stretch_mode = 3
+
+[node name="KCamera" type="Camera2D" parent="."]
+position = Vector2(320, 180)
+script = ExtResource("5_71j4m")
+metadata/_custom_type_script = "uid://6w4affnlb6au"
