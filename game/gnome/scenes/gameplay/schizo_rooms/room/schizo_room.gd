@@ -42,38 +42,80 @@ func get_collision_shape_aabb(polygon: PackedVector2Array) -> Rect2:
 @export var fuck_this := false:
     set(value):
         fuck_this = false
-        _generate_preview_textures_plural(closest_active_to_player)
-@export var closest_active_to_player: DoorPathway
+
+        # for path_id in pathways:
+        #     pathways[path_id].to.preview_textures.clear()
+        #     pathways[path_id].to.preview_rectangular.visible = false
+
+        var vps: Array = []
+        for path_id in pathways:
+            var path := pathways[path_id]
+
+            var light_vp := path.to._generate_preview_texture(path, 16, null)
+            vps.append([path, light_vp])
+        
+        # await get_tree().create_timer(0.2).timeout
+        await get_tree().process_frame
+        # await get_tree().process_frame
+        # await get_tree().process_frame
+        RenderingServer.force_draw()
+
+        # trect.texture = ImageTexture.create_from_image(vps[0][1].get_texture().get_image())
+
+        # await RenderingServer.frame_post_draw
+
+        for info in vps:
+            var img := ImageTexture.create_from_image(info[1].get_texture().get_image())
+            info[0].light_rect.texture = img.duplicate(0)
+            info[1].free()
+
+        for path_id in pathways:
+            var path := pathways[path_id]
+
+            var to_path := path.to_room.pathways[path.to_id]
+            var to_offset := to_path.position
+            # path.to.preview_rectangular.global_position = path.global_position - to_offset
+            path.light_rect.global_position = path.global_position - to_offset
+
+            var player := Player.get_instance(self)
+            if abs(path.global_position.y - player.global_position.y) > 256:
+                continue
+            if abs(path.global_position.x - player.global_position.x) > 256:
+                continue
+
+            ray.global_position = player.global_position
+            ray.target_position = path.global_position
+            path.force_update_transform()
+            
+            if ray.is_colliding():
+                path.light_rect.visible = false
+            else:
+                path.light_rect.visible = true
+
+            # var mat := path.to.preview_rectangular.material as ShaderMaterial
+
+            # var area2d = path.to.find_children("*", "Area2D", false)[0]
+            # var aabb := get_collision_shape_aabb(area2d.get_child(0).polygon)
+            # path.to.preview_rectangular.visible = true
+            # path.to.preview_rectangular.size = aabb.size
+
+            # mat.set_shader_parameter("u_textures", path.to.preview_textures)
+            # mat.set_shader_parameter("u_texture_count", path.to.preview_textures.size())
+        
+        # get_tree().create_timer(0.5).timeout.connect(
+
+        # print("AA")
+
+# @export var closest_active_to_player: DoorPathway
 @export var player_instance: Player
 @export var schizo_active_room: SchizoRoom
 
-func _generate_preview_textures_plural(path: DoorPathway) -> void:
-    # var color_vp := _generate_preview_texture(16)
-    var light_vp := _generate_preview_texture(path, 16, null)
+# @export var preview_rectangular: ColorRect
+# var preview_textures: Array[Texture2D] = []
 
-    # if color_vp == null or light_vp == null:
-    if light_vp == null:
-        return
+# @export var preview_vp: SubViewport
 
-    await get_tree().process_frame
-    RenderingServer.force_draw()
-
-    if not Engine.is_editor_hint():
-        # a_glimpse_to_the_past_colours = ImageTexture.create_from_image(color_vp.get_texture().get_image()).duplicate()
-        path.a_glimpse_to_the_past_lights = ImageTexture.create_from_image(light_vp.get_texture().get_image()).duplicate()
-        # remove_child(color_vp)
-        remove_child(light_vp)
-        # color_vp.free()
-        light_vp.free()
-
-
-func _generate_preview_texture(paath: DoorPathway, cull_mask: int, exclude_other: SubViewport) -> SubViewport:
-    var path := closest_active_to_player if Engine.is_editor_hint() else paath
-    var close := path
-    # if close.to != self:
-        # return null
-    # print("acctually doing something")
-
+func _generate_preview_texture(path: DoorPathway, cull_mask: int, exclude_other: SubViewport) -> SubViewport:
     var aabb := get_collision_shape_aabb($"Area2D".get_child(0).polygon)
     var vp := SubViewport.new()
     add_child(vp)
@@ -89,19 +131,32 @@ func _generate_preview_texture(paath: DoorPathway, cull_mask: int, exclude_other
     for child in get_children():
         if child != vp and child != exclude_other and child is not SubViewport:
             var d = child.duplicate(0)
+            if d.name == "Hidden":
+                d.visible = true
             vp.add_child(d)
             d.owner = get_tree().edited_scene_root
 
-    for child in SchizoRoom.active_room.get_children():
-    # for child in schizo_active_room.get_children():
-        if child is not SubViewport:
-            var d = child.duplicate(0)
-            vp.add_child(d)
-            d.owner = get_tree().edited_scene_root
-            var pos = path.to.pathways[path.to_id].global_position - (path.global_position - child.global_position) - self.global_position
-            d.global_position = pos
+    if Engine.is_editor_hint():
+        for child in schizo_active_room.get_children():
+            if child is not SubViewport:
+                var d = child.duplicate(0)
+                if d.name == "Hidden":
+                    d.visible = true
+                vp.add_child(d)
+                d.owner = get_tree().edited_scene_root
+                var pos = path.to.pathways[path.to_id].global_position - (path.global_position - child.global_position) - self.global_position
+                d.global_position = pos
+    else:
+        for child in SchizoRoom.active_room.get_children():
+            if child is not SubViewport:
+                var d = child.duplicate(0)
+                vp.add_child(d)
+                d.owner = get_tree().edited_scene_root
+                var pos = path.to.pathways[path.to_id].global_position - (path.global_position - child.global_position) - self.global_position
+                d.global_position = pos
 
     var player := player_instance if Engine.is_editor_hint() else Player.get_instance(self)
+    # var player := Player.get_instance(self)
     var light: PointLight2D
     if Engine.is_editor_hint():
         var lights =  player_instance.find_children("*", "PointLight2D", true)
@@ -150,103 +205,64 @@ func _ready() -> void:
     ray.enabled = false
     ray.hit_from_inside = false
 
-var closest_path_to_player: DoorPathway
-
 func _process(_delta: float) -> void:
     if Engine.is_editor_hint():
         return
 
-    var player := Player.get_instance(self)
-    var min_dist := 9999.9
-    var closest_path: DoorPathway
-    for path_id in pathways:
-        var path := pathways[path_id]
-        var dist := path.global_position.distance_to(player.global_position)
-        if dist < min_dist:
-            min_dist = dist
-            closest_path = path
-
-    if min_dist < 9996.9:
-        closest_path_to_player = closest_path
-
     if not active:
-        if Engine.get_frames_drawn() % 2 == 0:
-            for path_id in pathways:
-                var path := pathways[path_id]
-                # _generate_preview_textures_plural(path)
-                path.color_rect.visible = false
-                path.light_rect.visible = false
-                path.light_rect.z_index = 0
         return
+    
+    if Engine.get_frames_drawn() % 30 == 0:
+        fuck_this = true
+        # assert(false)
 
+    # var player := Player.get_instance(self)
+    # for path_id in pathways:
+    #     var path := pathways[path_id]
+    #     path.to.preview_textures.clear()
+    #     path.to.preview_rectangular.visible = false
 
-    # var min_dist := 9999.9
-    # var closest_path: DoorPathway
-    for path_id in pathways:
-        var path := pathways[path_id]
+    # var vps := []
+    # for path_id in pathways:
+    #     var path := pathways[path_id]
 
-        if abs(path.global_position.y - player.global_position.y) > 256:
-            continue
-        if abs(path.global_position.x - player.global_position.x) > 256:
-            continue
+    #     if abs(path.global_position.y - player.global_position.y) > 256:
+    #         continue
+    #     if abs(path.global_position.x - player.global_position.x) > 256:
+    #         continue
 
-        ray.global_position = player.global_position
-        ray.target_position = path.global_position
-        path.force_update_transform()
-
-        # var dist := path.global_position.distance_to(player.global_position)
-        # var zindex := 10 - roundi(dist / 10)
-        # print("path ", path_id, " : ", zindex)
-        # path.color_rect.z_index = zindex
-        # path.light_rect.z_index = zindex
-        # print(name)
-        # print(closest_path_to_player)
-        if path != closest_path_to_player:
-            path.light_rect.z_index = -1
+    #     ray.global_position = player.global_position
+    #     ray.target_position = path.global_position
+    #     path.force_update_transform()
         
-        if ray.is_colliding():
-            path.color_rect.visible = false
-            path.light_rect.visible = false
-            continue
+    #     if ray.is_colliding():
+    #         continue
         
-        # if path_id == "right":
-        #     return
-        # print("drawing preview for ", path_id)
+    #     var light_vp := path.to._generate_preview_texture(path, 16, null)
+    #     vps.append([path, light_vp])
 
-        path.to._generate_preview_textures_plural(path)
+    #     if path.a_glimpse_to_the_past_lights != null:
+    #         var to_path := path.to_room.pathways[path.to_id]
+    #         var to_offset := to_path.position
+    #         path.to.preview_rectangular.global_position = path.global_position - to_offset
 
-        # _generate_preview_textures_plural(path.to.pathways[path.to_id])
-        # _generate_preview_textures_plural(path)
-        
-        # var dist := path.global_position.distance_to(player.global_position)
-        # if dist < min_dist:
-        #     min_dist = dist
-        #     closest_path = path
+    # await get_tree().process_frame
+    # RenderingServer.force_draw()
 
-    #     # print("Trying to move ", path.to_room.name, " to ", name)
-        
-    #     # move room such that the 2 markers are at same position
-        var to_path := path.to_room.pathways[path.to_id]
-        var to_offset := to_path.position
+    # for info in vps:
+    #     info[0].to.preview_textures.append(info[1].get_texture().duplicate(0))
 
-        path.color_rect.visible = true
-        path.light_rect.visible = true
+    # for path_id in pathways:
+    #     var path := pathways[path_id]
+    #     var mat := path.to.preview_rectangular.material as ShaderMaterial
 
-        path.color_rect.global_position = path.global_position - to_offset
-        path.light_rect.global_position = path.global_position - to_offset
+    #     var area2d = path.to.find_children("*", "Area2D", false)[0]
+    #     var aabb := get_collision_shape_aabb(area2d.get_child(0).polygon)
+    #     path.to.preview_rectangular.size = aabb.size
 
-        # path.color_rect.texture = path.to_room.pathways[path.to_id].a_glimpse_to_the_past_colours
-        # path.color_rect.texture = path.to_room.pathways[path.to_id].a_glimpse_to_the_past_colours
-        # path.light_rect.texture = path.to_room.pathways[path.to_id].a_glimpse_to_the_past_lights
-        path.light_rect.texture = path.a_glimpse_to_the_past_lights
+    #     mat.set_shader_parameter("u_textures", path.to.preview_textures)
+    #     mat.set_shader_parameter("u_texture_count", path.to.preview_textures.size())
 
-    #     path.to_room.global_position = path.global_position - to_offset
-    #     # print(path.to_room.global_position)
-    #     # print("-=-=")
-
-    # if min_dist < 999.9 and Engine.get_frames_drawn() % 30 == 0:
-    #     # print(closest_path)
-    #     _foresee_the_present(closest_path)
 
 func _exit_tree() -> void:
     if Engine.is_editor_hint():

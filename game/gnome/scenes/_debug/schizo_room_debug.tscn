@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://di38mmxmbkshk"]
+[gd_scene load_steps=15 format=3 uid="uid://di38mmxmbkshk"]
 
 [ext_resource type="Script" uid="uid://xyxfnjqqce7k" path="res://gnome/scenes/_debug/schizo_room_debug.gd" id="1_mgu8n"]
 [ext_resource type="PackedScene" uid="uid://bmg2s3wcbk6vk" path="res://gnome/scenes/gameplay/schizo_rooms/scene.tscn" id="2_wmmid"]
+[ext_resource type="Shader" uid="uid://c471a603yrib2" path="res://gnome/scenes/_debug/schizo_room_debug.gdshader" id="4_2c8b0"]
 [ext_resource type="Script" uid="uid://cwa5lk4vvkb6r" path="res://gnome/scenes/_debug/viewport_frick.gd" id="14_kdyjf"]
 [ext_resource type="Shader" uid="uid://chm6nn5l4ohry" path="res://gnome/shaders/schizo_room_blitter.gdshader" id="14_smdbc"]
 
@@ -10,6 +11,12 @@ viewport_path = NodePath("Colors")
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_smdbc"]
 viewport_path = NodePath("Lights")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gqd5e"]
+shader = ExtResource("4_2c8b0")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_wmmid"]
+viewport_path = NodePath("LightsTheSecond")
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_okeh7"]
 viewport_path = NodePath("CurrentRoom")
@@ -30,10 +37,11 @@ shader_parameter/u_tex = SubResource("ViewportTexture_030ah")
 shader_parameter/u_mask_tex = SubResource("ViewportTexture_kdyjf")
 shader_parameter/u_mask_mask_tex = SubResource("ViewportTexture_cx5o7")
 
-[node name="SchizoRoomDebug" type="Node2D" node_paths=PackedStringArray("colors_vp", "light_vp", "room_vp")]
+[node name="SchizoRoomDebug" type="Node2D" node_paths=PackedStringArray("colors_vp", "light_vp", "lights_2_vp", "room_vp")]
 script = ExtResource("1_mgu8n")
 colors_vp = NodePath("Colors")
 light_vp = NodePath("Lights")
+lights_2_vp = NodePath("LightsTheSecond")
 room_vp = NodePath("CurrentRoom")
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -53,15 +61,90 @@ render_target_update_mode = 4
 
 [node name="Room1" parent="Colors/Scene" index="2" node_paths=PackedStringArray("pathways")]
 pathways = {
-"left": NodePath("Pathways/Marker2D"),
-"right": NodePath("Pathways/Marker2D2")
+"left": null,
+"right": null
 }
+
+[node name="@TextureRect@210080" type="TextureRect" parent="Colors/Scene/Room1/Pathways/Left" index="0"]
+visibility_layer = 17
+
+[node name="@TextureRect@211967" type="TextureRect" parent="Colors/Scene/Room1/Pathways/Left" index="2"]
+visibility_layer = 33
+
+[node name="@TextureRect@219867" type="TextureRect" parent="Colors/Scene/Room1/Pathways/Left" index="3"]
+visibility_layer = 33
+
+[node name="@TextureRect@227699" type="TextureRect" parent="Colors/Scene/Room1/Pathways/Left" index="5"]
+visibility_layer = 33
+
+[node name="@TextureRect@233863" type="TextureRect" parent="Colors/Scene/Room1/Pathways/Left" index="6"]
+visibility_layer = 33
+
+[node name="@TextureRect@237393" type="TextureRect" parent="Colors/Scene/Room1/Pathways/Left" index="7"]
+visibility_layer = 33
+
+[node name="@TextureRect@210081" type="TextureRect" parent="Colors/Scene/Room1/Pathways/Right" index="0"]
+visibility_layer = 17
+
+[node name="@TextureRect@211968" type="TextureRect" parent="Colors/Scene/Room1/Pathways/Right" index="2"]
+visibility_layer = 33
+
+[node name="@TextureRect@219868" type="TextureRect" parent="Colors/Scene/Room1/Pathways/Right" index="3"]
+visibility_layer = 33
+
+[node name="@TextureRect@227700" type="TextureRect" parent="Colors/Scene/Room1/Pathways/Right" index="5"]
+visibility_layer = 33
+
+[node name="@TextureRect@233864" type="TextureRect" parent="Colors/Scene/Room1/Pathways/Right" index="6"]
+visibility_layer = 33
+
+[node name="@TextureRect@237394" type="TextureRect" parent="Colors/Scene/Room1/Pathways/Right" index="7"]
+visibility_layer = 33
 
 [node name="Room11" parent="Colors/Scene" index="3" node_paths=PackedStringArray("pathways")]
 pathways = {
 "left": NodePath("Pathways/Left"),
-"right": NodePath("Pathways/Left2")
+"right": null
 }
+
+[node name="Hidden" parent="Colors/Scene/Room11" index="1"]
+modulate = Color(1, 1, 1, 0.25098)
+
+[node name="@TextureRect@210082" type="TextureRect" parent="Colors/Scene/Room11/Pathways/Left" index="0"]
+visibility_layer = 17
+
+[node name="@TextureRect@211969" type="TextureRect" parent="Colors/Scene/Room11/Pathways/Left" index="2"]
+visibility_layer = 33
+
+[node name="@TextureRect@219869" type="TextureRect" parent="Colors/Scene/Room11/Pathways/Left" index="3"]
+visibility_layer = 33
+
+[node name="@TextureRect@227701" type="TextureRect" parent="Colors/Scene/Room11/Pathways/Left" index="5"]
+visibility_layer = 33
+
+[node name="@TextureRect@233865" type="TextureRect" parent="Colors/Scene/Room11/Pathways/Left" index="6"]
+visibility_layer = 33
+
+[node name="@TextureRect@237395" type="TextureRect" parent="Colors/Scene/Room11/Pathways/Left" index="7"]
+visibility_layer = 33
+
+[node name="@TextureRect@210083" type="TextureRect" parent="Colors/Scene/Room11/Pathways/Right" index="0"]
+visibility_layer = 17
+
+[node name="@TextureRect@211970" type="TextureRect" parent="Colors/Scene/Room11/Pathways/Right" index="2"]
+visibility_layer = 33
+
+[node name="@TextureRect@219870" type="TextureRect" parent="Colors/Scene/Room11/Pathways/Right" index="3"]
+visibility_layer = 33
+
+[node name="@TextureRect@227702" type="TextureRect" parent="Colors/Scene/Room11/Pathways/Right" index="5"]
+visibility_layer = 33
+
+[node name="@TextureRect@233866" type="TextureRect" parent="Colors/Scene/Room11/Pathways/Right" index="6"]
+visibility_layer = 33
+
+[node name="@TextureRect@237396" type="TextureRect" parent="Colors/Scene/Room11/Pathways/Right" index="7"]
+visibility_layer = 33
 
 [node name="Lights" type="SubViewport" parent="."]
 disable_3d = true
@@ -73,6 +156,19 @@ canvas_item_default_texture_filter = 0
 canvas_cull_mask = 4293918736
 
 [node name="Camera2D" type="Camera2D" parent="Lights" node_paths=PackedStringArray("cam")]
+script = ExtResource("14_kdyjf")
+cam = NodePath("../../Colors/Scene/CameraFollow/KCamera")
+
+[node name="LightsTheSecond" type="SubViewport" parent="."]
+disable_3d = true
+transparent_bg = true
+handle_input_locally = false
+snap_2d_transforms_to_pixel = true
+snap_2d_vertices_to_pixel = true
+canvas_item_default_texture_filter = 0
+canvas_cull_mask = 4293918752
+
+[node name="Camera2D" type="Camera2D" parent="LightsTheSecond" node_paths=PackedStringArray("cam")]
 script = ExtResource("14_kdyjf")
 cam = NodePath("../../Colors/Scene/CameraFollow/KCamera")
 
@@ -103,6 +199,14 @@ offset_right = 256.0
 offset_bottom = 256.0
 texture = SubResource("ViewportTexture_smdbc")
 
+[node name="Light2" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_gqd5e")
+offset_left = -256.0
+offset_top = -256.0
+offset_right = 256.0
+offset_bottom = 256.0
+texture = SubResource("ViewportTexture_wmmid")
+
 [node name="Room" type="TextureRect" parent="."]
 visible = false
 offset_left = -256.0
@@ -120,5 +224,3 @@ offset_right = 256.0
 offset_bottom = 256.0
 
 [editable path="Colors/Scene"]
-[editable path="Colors/Scene/Room11"]
-[editable path="Colors/Scene/Room12"]
