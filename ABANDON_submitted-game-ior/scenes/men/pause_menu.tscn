@@ -1,0 +1,132 @@
+[gd_scene load_steps=5 format=3 uid="uid://b6ybdhksrn4h6"]
+
+[ext_resource type="Script" uid="uid://bsh1iu42ox76q" path="res://scenes/men/pause_menu.gd" id="1_c65u5"]
+[ext_resource type="Texture2D" uid="uid://c5owvwsra6nq3" path="res://post_process/crt_tex.png" id="3_n01v3"]
+[ext_resource type="FontFile" uid="uid://cutyo7w3ckfal" path="res://resources/fonts/Spectral-Bold.ttf" id="4_r61f8"]
+
+[sub_resource type="Environment" id="Environment_d3fxs"]
+background_mode = 3
+glow_enabled = true
+glow_levels/1 = 1.13
+glow_levels/2 = 7.11
+glow_levels/3 = 0.0
+glow_levels/4 = 0.55
+glow_strength = 0.41
+glow_mix = 0.413
+glow_bloom = 0.42
+glow_blend_mode = 4
+glow_hdr_threshold = 1.26
+glow_map_strength = 0.6
+glow_map = ExtResource("3_n01v3")
+adjustment_enabled = true
+adjustment_brightness = 1.41
+adjustment_contrast = 1.12
+adjustment_saturation = 1.67
+
+[node name="PauseMenu" type="Node2D" node_paths=PackedStringArray("quit", "back", "sfx_slider", "mus_slider")]
+script = ExtResource("1_c65u5")
+quit = NodePath("Qit")
+back = NodePath("back")
+sfx_slider = NodePath("HSlider2")
+mus_slider = NodePath("HSlidermuss")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_left = -442.0
+offset_top = -247.0
+offset_right = 482.0
+offset_bottom = 287.0
+color = Color(0, 0, 0, 1)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_d3fxs")
+
+[node name="Wave" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 213.0
+offset_top = 51.0
+offset_right = 213.0
+offset_bottom = 51.0
+
+[node name="Score" type="RichTextLabel" parent="Wave"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -171.0
+offset_top = -42.0
+offset_right = 171.0
+offset_bottom = 42.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/normal_font = ExtResource("4_r61f8")
+theme_override_font_sizes/normal_font_size = 48
+text = "IOR Sim"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Qit" type="Button" parent="."]
+offset_left = 109.0
+offset_top = 159.0
+offset_right = 209.0
+offset_bottom = 199.0
+text = "Quit"
+
+[node name="back" type="Button" parent="."]
+offset_left = 228.0
+offset_top = 159.0
+offset_right = 328.0
+offset_bottom = 199.0
+text = "Back"
+
+[node name="HSlidermuss" type="HSlider" parent="."]
+offset_left = 159.0
+offset_top = 100.0
+offset_right = 346.0
+offset_bottom = 116.0
+
+[node name="Score" type="RichTextLabel" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 78.0
+offset_top = 94.0
+offset_right = 156.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/normal_font = ExtResource("4_r61f8")
+theme_override_font_sizes/normal_font_size = 16
+text = "Music"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSlider2" type="HSlider" parent="."]
+offset_left = 159.0
+offset_top = 132.0
+offset_right = 346.0
+offset_bottom = 148.0
+
+[node name="Score2" type="RichTextLabel" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 78.0
+offset_top = 126.0
+offset_right = 156.0
+offset_bottom = 152.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/normal_font = ExtResource("4_r61f8")
+theme_override_font_sizes/normal_font_size = 16
+text = "SFX"
+horizontal_alignment = 1
+vertical_alignment = 1

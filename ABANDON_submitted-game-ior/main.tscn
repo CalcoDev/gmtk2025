@@ -1,0 +1,59 @@
+[gd_scene load_steps=7 format=3 uid="uid://bqijgryskysy8"]
+
+[ext_resource type="PackedScene" uid="uid://lmelvc3xpj08" path="res://scenes/gameplay_scene.tscn" id="2_h2yge"]
+[ext_resource type="Shader" uid="uid://bqt16oukx0bra" path="res://post_process/crt_pp.gdshader" id="5_lquwl"]
+[ext_resource type="Texture2D" uid="uid://c5owvwsra6nq3" path="res://post_process/crt_tex.png" id="6_7mycd"]
+
+[sub_resource type="Environment" id="Environment_7mycd"]
+background_mode = 3
+glow_enabled = true
+glow_levels/1 = 1.13
+glow_levels/2 = 7.11
+glow_levels/3 = 0.0
+glow_levels/4 = 0.55
+glow_strength = 0.41
+glow_mix = 0.413
+glow_bloom = 0.42
+glow_blend_mode = 4
+glow_hdr_threshold = 1.26
+glow_map_strength = 0.6
+glow_map = ExtResource("6_7mycd")
+adjustment_enabled = true
+adjustment_brightness = 1.41
+adjustment_contrast = 1.12
+adjustment_saturation = 1.67
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_272bh"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7mycd"]
+resource_local_to_scene = true
+shader = ExtResource("5_lquwl")
+shader_parameter/tex = SubResource("ViewportTexture_272bh")
+shader_parameter/mask_tex = ExtResource("6_7mycd")
+shader_parameter/mask_brightness = 0.5
+shader_parameter/curve = 0.352
+shader_parameter/soft = false
+shader_parameter/color_offset = 0.402
+shader_parameter/brightness = 1.0
+shader_parameter/aspect = 0.93
+
+[node name="Main" type="Node2D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_7mycd")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+disable_3d = true
+handle_input_locally = false
+snap_2d_transforms_to_pixel = true
+snap_2d_vertices_to_pixel = true
+canvas_item_default_texture_filter = 0
+size = Vector2i(426, 240)
+
+[node name="GameplayScene" parent="SubViewport" instance=ExtResource("2_h2yge")]
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_7mycd")
+offset_right = 426.0
+offset_bottom = 240.0

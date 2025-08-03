@@ -1,0 +1,55 @@
+[gd_scene load_steps=10 format=3 uid="uid://bh8x7m21c4noe"]
+
+[ext_resource type="Script" uid="uid://hf2a4k8blav1" path="res://scenes/ball/ball.gd" id="1_jbgth"]
+[ext_resource type="Texture2D" uid="uid://da28j5hjr0e8e" path="res://assets/ball/ball.png" id="1_nv6q1"]
+[ext_resource type="Texture2D" uid="uid://bfn640xpvhvb0" path="res://assets/ball/ball_shadow.png" id="2_stoaj"]
+[ext_resource type="Shader" uid="uid://dgu1thenwnv67" path="res://scripts/downwell_trail/downwell_trail.gdshader" id="3_xotqv"]
+[ext_resource type="Script" uid="uid://dki6cjlntb65a" path="res://scripts/downwell_trail/downwell_trail.gd" id="4_jbgth"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_nv6q1"]
+radius = 8.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yjhvv"]
+shader = ExtResource("3_xotqv")
+shader_parameter/u_angle = 0.0
+shader_parameter/u_colors = PackedColorArray(0.329412, 0.2, 0.745098, 1, 0.901961, 0.141176, 0.686275, 1, 0.239216, 0.976471, 0.917647, 1)
+
+[sub_resource type="Gradient" id="Gradient_a81tc"]
+interpolation_mode = 1
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_r8c1m"]
+gradient = SubResource("Gradient_a81tc")
+width = 32
+height = 32
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[node name="Ball" type="CharacterBody2D"]
+collision_layer = 65536
+collision_mask = 40961
+motion_mode = 1
+script = ExtResource("1_jbgth")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_nv6q1")
+
+[node name="Shadow" type="Sprite2D" parent="."]
+position = Vector2(0, 10)
+texture = ExtResource("2_stoaj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_nv6q1")
+
+[node name="DownwellTrail" type="Sprite2D" parent="."]
+self_modulate = Color(1, 1, 1, 0)
+show_behind_parent = true
+z_index = -1
+material = SubResource("ShaderMaterial_yjhvv")
+texture = SubResource("GradientTexture2D_r8c1m")
+script = ExtResource("4_jbgth")
+do_stuff = true
+max_speed = 100.0
+trail_last_timer = 0.8
+metadata/_custom_type_script = "uid://dki6cjlntb65a"
